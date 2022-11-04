@@ -1,16 +1,33 @@
-import { createServer } from '@graphql-yoga/node'
-import gql from 'graphql-tag'
+import { ApolloServer } from "apollo-server-micro";
+import { schema } from "../../graphql/schema";
+import { resolvers } from "../../graphql/resolvers";
+import { createContext } from "../../graphql/context";
+import Cors from "micro-cors";
 
-import resolvers from 'lib/resolvers'
-import typeDefs from 'lib/schema'
+const cors = Cors();
 
-const server = createServer({
-  schema: {
-    typeDefs: gql(typeDefs),
-    resolvers,
+const apolloServer = new ApolloServer({
+  schema,
+  resolvers,
+  context: createContext,
+});
+
+const startServer = apolloServer.start();
+
+export default cors(async function handler(req, res) {
+  if (req.method === "OPTIONS") {
+    res.end();
+    return false;
+  }
+  await startServer;
+
+  await apolloServer.createHandler({
+    path: "/api/graphql",
+  })(req, res);
+});
+
+export const config = {
+  api: {
+    bodyParser: false,
   },
-  endpoint: '/api/graphql',
-  // graphiql: false // uncomment to disable GraphiQL
-})
-
-export default server
+};
