@@ -1,0 +1,19 @@
+name: GitHub Actions Cleanup Vercel Preview Deployment
+on: delete
+jobs:
+  Cleanup-Database:
+    if: github.event.ref_type == 'branch'
+    runs-on: ubuntu-latest
+    environment: Preview
+    container: postgres:15
+    env:
+      POSTGRES_USER: ${{ secrets.POSTGRES_USER }}
+      POSTGRES_PASSWORD: ${{ secrets.POSTGRES_PASSWORD }}
+    steps:
+      - name: Extract branch name
+        shell: bash
+        run: echo "branch=${${{github.event.ref}}#refs/heads/}" >> $GITHUB_OUTPUT
+        id: extract-branch
+      - name: Remove Database Schema
+        run: |
+          PGPASSWORD=${{ secrets.POSTGRES_PASSWORD }} psql -h ${{ secrets.PGHOST }} -d ${{ secrets.PGDATABASE }} -U ${{ secrets.POSTGRES_USER }} -c "DROP SCHEMA IF EXISTS \"${{ steps.extract-branch.outputs.branch }}\" CASCADE;"

@@ -1,0 +1,75 @@
+name: GitHub Actions Vercel Preview Deployment
+env:
+  VERCEL_ORG_ID: ${{ secrets.VERCEL_ORG_ID }}
+  VERCEL_PROJECT_ID: ${{ secrets.VERCEL_PROJECT_ID }}
+on:
+  push:
+    branches-ignore:
+      - main
+  workflow_dispatch:
+jobs:
+  Setup-Database:
+    runs-on: ubuntu-latest
+    environment: Preview
+    container: postgres:15
+    env:
+      POSTGRES_USER: ${{ secrets.POSTGRES_USER }}
+      POSTGRES_PASSWORD: ${{ secrets.POSTGRES_PASSWORD }}
+    steps:
+      - name: Extract branch name
+        shell: bash
+        run: echo "branch=${GITHUB_REF#refs/heads/}" >> $GITHUB_OUTPUT
+        id: extract-branch
+      - name: Show branch name
+        run: echo ${{ steps.extract-branch.outputs.branch }} #TODO: delete
+      - name: Create Database Schema
+        run: |
+          PGPASSWORD=${{ secrets.POSTGRES_PASSWORD }} psql -h ${{ secrets.PGHOST }} -d ${{ secrets.PGDATABASE }} -U ${{ secrets.POSTGRES_USER }} -c "CREATE SCHEMA IF NOT EXISTS \"${{ steps.extract-branch.outputs.branch }}\" AUTHORIZATION ${{ secrets.POSTGRES_USER }};"
+    outputs:
+      schema-name: ${{ steps.extract-branch.outputs.branch }}
+
+  Run-Database-Migrations:
+    needs: Setup-Database
+    environment: Preview
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+      - name: setup node
+        uses: actions/setup-node@v3
+        with:
+          node-version: "16"
+          cache: "npm"
+      - name: install dependencies
+        run: npm ci
+      - name: Create Database connection string
+        run: echo "DATABASE_URL=postgresql://${{ secrets.POSTGRES_USER }}:${{ secrets.POSTGRES_PASSWORD }}@${{ secrets.PGHOST }}:5432/${{ secrets.PGDATABASE }}?schema=${{ needs.Setup-Database.outputs.schema-name }}" >> $GITHUB_ENV
+      - name: Create Environment file
+        run: echo "DATABASE_URL=${{ env.DATABASE_URL }}" >> .env
+      - name: Show Environment File
+        run: cat .env # TODO: Delete
+      - name: Run Database Migrations
+        run: npx prisma db push
+
+  Deploy-Preview:
+    needs: Setup-Database
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2
+      - name: Install Vercel CLI
+        run: npm install --global vercel@latest
+      - name: Pull Vercel Environment Information
+        run: vercel pull --yes --environment=preview --token=${{ secrets.VERCEL_TOKEN }}
+      - name: Add Database staging environment variables
+        # https://github.com/vercel/next.js/discussions/16429#discussioncomment-1302156
+        run: |
+          echo "DATABASE_URL=postgresql://${{ secrets.POSTGRES_USER }}:${{ secrets.POSTGRES_PASSWORD }}@${{ secrets.PGHOST }}:5432/${{ secrets.PGDATABASE }}?schema=${{ needs.Setup-Database.outputs.schema-name }}" >> .env.production
+      - name: Deploy Project Artifacts to Vercel
+        id: deploy
+        run: echo "DEPLOYMENT_URL=$(vercel deploy --token=${{ secrets.VERCEL_TOKEN }})" >> $GITHUB_OUTPUT
+      - name: Show Deployment URL
+        run: echo ${{ steps.deploy.outputs.DEPLOYMENT_URL }}
+    environment:
+      name: Preview
+      url: ${{ steps.deploy.outputs.DEPLOYMENT_URL }}
+    outputs:
+      DEPLOYMENT_URL: ${{ steps.deploy.outputs.DEPLOYMENT_URL }}
