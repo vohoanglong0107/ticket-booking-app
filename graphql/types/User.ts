@@ -1,5 +1,5 @@
-import { enumType, objectType } from "nexus";
-import { Link } from "./Link";
+import { resolve } from "dns";
+import { enumType, objectType, queryType, stringArg } from "nexus";
 
 export const User = objectType({
   name: "User",
@@ -7,24 +7,26 @@ export const User = objectType({
     t.string("id");
     t.string("name");
     t.string("email");
-    t.string("image");
+    t.string("avatarURL");
     t.field("role", { type: Role });
-    t.list.field("bookmarks", {
-      type: Link,
-      async resolve(_parent, _args, ctx) {
-        return await ctx.prisma.user
-          .findUnique({
-            where: {
-              id: _parent.id,
-            },
-          })
-          .bookmarks();
-      },
-    });
   },
 });
 
 const Role = enumType({
   name: "Role",
-  members: ["USER", "ADMIN"],
+  members: ["USER", "ADMIN", "STORE_OWNER"],
+});
+
+export const UserQuery = queryType({
+  definition(t) {
+    t.field("user", {
+      type: User,
+      args: {
+        id: stringArg(),
+      },
+      async resolve(_, args, context) {
+        return context.prisma.user.findUnique({ where: { id: args.id } });
+      },
+    });
+  },
 });

@@ -2,45 +2,20 @@
 ### Do not make changes to this file directly
 
 
-type Edge {
-  cursor: String
-  node: Link
-}
-
-type Link {
-  category: String
-  description: String
-  id: String
-  imageUrl: String
-  title: String
-  url: String
-  users: [User]
-}
-
-type PageInfo {
-  endCursor: String
-  hasNextPage: Boolean
-}
-
 type Query {
-  links(after: String, first: Int): Response
-}
-
-type Response {
-  edges: [Edge]
-  pageInfo: PageInfo
+  user(id: String): User
 }
 
 enum Role {
   ADMIN
+  STORE_OWNER
   USER
 }
 
 type User {
-  bookmarks: [Link]
+  avatarURL: String
   email: String
   id: String
-  image: String
   name: String
   role: Role
 }
