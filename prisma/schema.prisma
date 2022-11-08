@@ -16,25 +16,17 @@ model User {
   id        String   @id @default(uuid())
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
-  email     String?  @unique
+  email     String  @unique
+  name      String
   avatarURL String?
   role      Role     @default(USER)
-  bookmarks Link[]
+  
 }
 
 enum Role {
   USER
   ADMIN
+  STORE_OWNER
 }
 
-model Link {
-  id          String   @id @default(uuid())
-  createdAt   DateTime @default(now())
-  updatedAt   DateTime @updatedAt
-  title       String
-  description String
-  url         String
-  imageUrl    String
-  category    String
-  users       User[]
-}
+
