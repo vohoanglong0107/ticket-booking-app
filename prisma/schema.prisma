@@ -16,11 +16,10 @@ model User {
   id        String   @id @default(uuid())
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
-  email     String  @unique
+  email     String   @unique
   name      String
   avatarURL String?
   role      Role     @default(USER)
-  
 }
 
 enum Role {
@@ -29,4 +28,13 @@ enum Role {
   STORE_OWNER
 }
 
-
+model Game {
+  id              String   @id @default(uuid())
+  createdAt       DateTime @default(now())
+  updatedAt       DateTime @updatedAt
+  name            String
+  description     String?
+  location        String
+  price           Float
+  remaining_slot Int
+}
