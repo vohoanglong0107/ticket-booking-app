@@ -11,6 +11,11 @@ type Game {
   remaining_slot: Int
 }
 
+type Mutation {
+  game(description: String, location: String, name: String, price: Float, remaining_slot: Int): Game
+  updateGame(description: String, id: String, location: String, name: String, price: Float, remaining_slot: Int): Game
+}
+
 type Query {
   games: [Game]!
   user(id: String): User

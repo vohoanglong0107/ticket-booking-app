@@ -22,6 +22,17 @@ model User {
   role      Role     @default(USER)
 }
 
+model Game {
+  id              String   @id @default(uuid())
+  createdAt       DateTime @default(now())
+  updatedAt       DateTime @updatedAt
+  name            String
+  description     String?
+  location        String
+  price           Float
+  remaining_slot  Int
+}
+
 enum Role {
   USER
   ADMIN

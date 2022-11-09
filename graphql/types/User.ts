@@ -1,5 +1,5 @@
 import { resolve } from "dns";
-import { enumType, objectType, queryType, stringArg } from "nexus";
+import { enumType, objectType, queryType, stringArg, extendType } from "nexus";
 
 export const User = objectType({
   name: "User",
@@ -17,7 +17,8 @@ const Role = enumType({
   members: ["USER", "ADMIN", "STORE_OWNER"],
 });
 
-export const UserQuery = queryType({
+export const UserQuery = extendType({
+  type: "Query",
   definition(t) {
     t.field("user", {
       type: User,
