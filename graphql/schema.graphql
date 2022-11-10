@@ -2,7 +2,17 @@
 ### Do not make changes to this file directly
 
 
+type Game {
+  description: String
+  id: String
+  location: String
+  name: String
+  price: Float
+  remaining_slot: Int
+}
+
 type Query {
+  games: [Game]!
   user(id: String): User
 }
 
