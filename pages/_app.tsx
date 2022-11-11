@@ -1,20 +1,27 @@
+import { ReactElement, ReactNode } from "react";
 import { AppProps } from "next/app";
-import Navbar from "../components/Navbar/Navbar";
+import { NextPage } from "next";
 import { ApolloProvider } from "@apollo/client";
 import Layout from "@/components/Layout";
 import apolloClient from "../lib/apollo";
-import "../components/Navbar/Navbar.css";
-import ListItem from "@/components/ListItem";
-import TitlebarImageList from "@/components/View/View-source";
+import { AuthProvider } from "@/lib/auth";
+import "@/styles/globals.css";
 
-export default function App({ Component, pageProps }: AppProps) {
+export type NextPageWithLayout<P = {}, IP = P> = NextPage<P, IP> & {
+  getLayout?: (page: ReactElement) => ReactNode;
+};
+
+type AppPropsWithLayout = AppProps & {
+  Component: NextPageWithLayout;
+};
+
+export default function App({ Component, pageProps }: AppPropsWithLayout) {
+  const getLayout = Component.getLayout || ((page) => <Layout>{page}</Layout>);
   return (
-    <ApolloProvider client={apolloClient}>
-      <Layout>
-        <Navbar />
-        <TitlebarImageList />
-        <Component {...pageProps} />
-      </Layout>
-    </ApolloProvider>
+    <AuthProvider>
+      <ApolloProvider client={apolloClient}>
+        {getLayout(<Component {...pageProps} />)}
+      </ApolloProvider>
+    </AuthProvider>
   );
 }

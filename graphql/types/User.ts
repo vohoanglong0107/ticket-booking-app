@@ -1,5 +1,11 @@
-import { resolve } from "dns";
-import { enumType, objectType, queryType, stringArg, extendType } from "nexus";
+import {
+  enumType,
+  objectType,
+  queryType,
+  stringArg,
+  extendType,
+  arg,
+} from "nexus";
 
 export const User = objectType({
   name: "User",
@@ -27,6 +33,33 @@ export const UserQuery = extendType({
       },
       async resolve(_, args, context) {
         return context.prisma.user.findUnique({ where: { id: args.id } });
+      },
+    });
+  },
+});
+
+export const UserCreate = extendType({
+  type: "Mutation",
+  definition(t) {
+    t.field("createUser", {
+      type: User,
+      args: {
+        name: stringArg(),
+        email: stringArg(),
+        avatarURL: stringArg(),
+        role: arg({
+          type: Role,
+        }),
+      },
+      async resolve(_, args, context) {
+        return context.prisma.user.create({
+          data: {
+            name: args.name,
+            email: args.email,
+            avatarURL: args.avatarURL,
+            role: args.role,
+          },
+        });
       },
     });
   },

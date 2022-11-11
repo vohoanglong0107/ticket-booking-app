@@ -1,6 +1,5 @@
 import type { Story, Meta } from "@storybook/react";
 import { action } from "@storybook/addon-actions";
-import "./Navbar.css";
 import Navbar from "./Navbar";
 
 export default {
@@ -8,4 +7,9 @@ export default {
   component: Navbar,
 };
 
-export const Home = () => <Navbar />;
+const user = {
+  email: "",
+};
+
+export const WithoutUser = () => <Navbar user={null} />;
+export const WithUser = () => <Navbar user={user} />;

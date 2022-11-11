@@ -88,7 +88,7 @@ export default function SignIn({ onClick }) {
                 <div className="flex items-center rounded-b-lg lg:w-6/12 lg:rounded-r-lg lg:rounded-bl-none">
                   <div className="flex w-full items-center justify-center">
                     <label
-                      for="dropzone-file"
+                      htmlFor="dropzone-file"
                       className="dark:hover:bg-bray-800 h-120 bg-white-50 dark:border-white-600 dark:bg-white-700 flex w-4/5 cursor-pointer flex-col items-center justify-center rounded-lg border-2 border-dashed border-gray-300 hover:bg-gray-100 dark:hover:border-gray-500 dark:hover:bg-gray-600"
                     >
                       <div className="flex flex-col items-center justify-center pt-5 pb-6">
@@ -115,7 +115,11 @@ export default function SignIn({ onClick }) {
                           SVG, PNG, JPG or GIF (MAX. 800x400px)
                         </p>
                       </div>
-                      <input id="dropzone-file" type="file" class="hidden" />
+                      <input
+                        id="dropzone-file"
+                        type="file"
+                        className="hidden"
+                      />
                     </label>
                   </div>
                 </div>
