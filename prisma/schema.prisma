@@ -22,12 +22,6 @@ model User {
   role      Role     @default(USER)
 }
 
-enum Role {
-  USER
-  ADMIN
-  STORE_OWNER
-}
-
 model Game {
   id              String   @id @default(uuid())
   createdAt       DateTime @default(now())
@@ -36,5 +30,11 @@ model Game {
   description     String?
   location        String
   price           Float
-  remaining_slot Int
+  remaining_slot  Int
+}
+
+enum Role {
+  USER
+  ADMIN
+  STORE_OWNER
 }

@@ -1,12 +1,5 @@
 import { resolve } from "dns";
-import {
-  enumType,
-  extendType,
-  mutationType,
-  objectType,
-  queryType,
-  stringArg,
-} from "nexus";
+import { enumType, objectType, queryType, stringArg, extendType } from "nexus";
 
 export const User = objectType({
   name: "User",
