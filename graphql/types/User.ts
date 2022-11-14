@@ -31,3 +31,30 @@ export const UserQuery = extendType({
     });
   },
 });
+
+export const UpdateUser = extendType({
+  type: "Mutation",
+  definition(t) {
+    t.field("user", {
+      type: User,
+      args: {
+        id: stringArg(),
+        name: stringArg(),
+        email: stringArg(),
+        avatarURL: stringArg(),
+        role: Role,
+      },
+      async resolve(_, args, context) {
+        return context.prisma.user.update({
+          where: { id: args.id },
+          data: {
+            name: args.name,
+            email: args.email,
+            avatarURL: args.avatarURL,
+            role: args.role,
+          },
+        });
+      },
+    });
+  },
+});
