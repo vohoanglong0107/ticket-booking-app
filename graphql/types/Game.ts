@@ -72,6 +72,9 @@ export const GameUpdate = extendType({
       },
       async resolve(_, args, context) {
         return context.prisma.game.update({
+          where:{
+            id: args.id
+          },
           data: {
             name: args.name,
             description: args.description,
