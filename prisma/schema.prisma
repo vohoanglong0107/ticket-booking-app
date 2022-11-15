@@ -20,6 +20,7 @@ model User {
   name      String
   avatarURL String?
   role      Role     @default(USER)
+  Booking   Booking[]
 }
 
 model Game {
@@ -31,6 +32,21 @@ model Game {
   location        String
   price           Float
   remaining_slot  Int
+  Booking         Booking[]
+}
+
+model Booking {
+  
+  id              String   @id @default(uuid())
+  number_of_participants  Int
+  payment_status  Boolean
+  user_id         String?
+  game_id         String?
+  User            User?   @relation(fields: [user_id], references: [id])
+  Game            Game?   @relation(fields: [game_id], references: [id])
+  
+
+
 }
 
 enum Role {
