@@ -7,119 +7,118 @@ export default function SignIn({ onClick }) {
       <div className="container h-full py-12 px-6">
         <div className="g-6 flex h-full flex-wrap items-center justify-center text-gray-800">
           <div className="xl:w-10/12">
-            <div className="block rounded-lg bg-white shadow-lg">
-              <div className="g-0 max-w-lg lg:flex lg:flex-wrap">
-                <form class="w-full max-w-lg">
-                  <div class="-mx-3 mb-6 flex flex-wrap">
-                    <div class="mb-6 w-full px-3 md:mb-0 md:w-1/2">
-                      <label
-                        class="mb-2 block text-xs font-bold uppercase tracking-wide text-gray-700"
-                        for="grid-first-name"
-                      >
-                        First Name
-                      </label>
-                      <input
-                        class="mb-3 block w-full appearance-none rounded border border-red-500 bg-gray-200 py-3 px-4 leading-tight text-gray-700 focus:bg-white focus:outline-none"
-                        id="grid-first-name"
-                        type="text"
-                        placeholder="Jane"
-                      />
-                      <p class="text-xs italic text-red-500">
-                        Please fill out this field.
-                      </p>
-                    </div>
-                    <div class="w-full px-3 md:w-1/2">
-                      <label
-                        class="mb-2 block text-xs font-bold uppercase tracking-wide text-gray-700"
-                        for="grid-last-name"
-                      >
-                        Last Name
-                      </label>
-                      <input
-                        class="block w-full appearance-none rounded border border-gray-200 bg-gray-200 py-3 px-4 leading-tight text-gray-700 focus:border-gray-500 focus:bg-white focus:outline-none"
-                        id="grid-last-name"
-                        type="text"
-                        placeholder="Doe"
-                      />
-                    </div>
-                  </div>
-                  <div class="-mx-3 mb-6 flex flex-wrap">
-                    <div class="w-full px-3">
-                      <label
-                        class="mb-2 block text-xs font-bold uppercase tracking-wide text-gray-700"
-                        for="grid-password"
-                      >
-                        Password
-                      </label>
-                      <input
-                        class="mb-3 block w-full appearance-none rounded border border-gray-200 bg-gray-200 py-3 px-4 leading-tight text-gray-700 focus:border-gray-500 focus:bg-white focus:outline-none"
-                        id="grid-password"
-                        type="password"
-                        placeholder="******************"
-                      />
-                      <p class="text-xs italic text-gray-600">
-                        {"Make it as long and as crazy as you'd like"}
-                      </p>
-                    </div>
-                  </div>
-                  <div class="-mx-3 mb-2 flex flex-wrap">
-                    <div class="mb-6 w-full px-3 md:mb-0 md:w-1/3">
-                      <label
-                        class="mb-2 block text-xs font-bold uppercase tracking-wide text-gray-700"
-                        for="grid-city"
-                      >
-                        City
-                      </label>
-                      <input
-                        class="block w-full appearance-none rounded border border-gray-200 bg-gray-200 py-3 px-4 leading-tight text-gray-700 focus:border-gray-500 focus:bg-white focus:outline-none"
-                        id="grid-city"
-                        type="text"
-                        placeholder="Albuquerque"
-                      />
-                    </div>
-                    <div class="mb-6 w-full px-3 md:mb-0 md:w-1/3">
-                      <label
-                        class="mb-2 block text-xs font-bold uppercase tracking-wide text-gray-700"
-                        for="grid-state"
-                      >
-                        State
-                      </label>
-                      <div class="relative">
-                        <select
-                          class="block w-full appearance-none rounded border border-gray-200 bg-gray-200 py-3 px-4 pr-8 leading-tight text-gray-700 focus:border-gray-500 focus:bg-white focus:outline-none"
-                          id="grid-state"
-                        >
-                          <option>New Mexico</option>
-                          <option>Missouri</option>
-                          <option>Texas</option>
-                        </select>
-                        <div class="pointer-events-none absolute inset-y-0 right-0 flex items-center px-2 text-gray-700">
-                          <svg
-                            class="h-4 w-4 fill-current"
-                            xmlns="http://www.w3.org/2000/svg"
-                            viewBox="0 0 20 20"
-                          >
-                            <path d="M9.293 12.95l.707.707L15.657 8l-1.414-1.414L10 10.828 5.757 6.586 4.343 8z" />
-                          </svg>
-                        </div>
+            <div className="block rounded-lg bg-white shadow-lg  md:p-12">
+              <div className="text-center">
+                <h4 className="mt-1 mb-12 pb-1 text-xl font-semibold">
+                  Game register
+                </h4>
+              </div>
+              <div className="g-0 lg:flex lg:flex-wrap ">
+                <div className="border-black-500 border-r-2 px-4 md:px-0 lg:w-6/12">
+                  <div className="md:mx-6">
+                    <form>
+                      <div className="mb-4">
+                        <input
+                          type="text"
+                          className="form-control m-0 block w-full rounded border border-solid border-gray-300 bg-white bg-clip-padding px-3 py-1.5 text-base font-normal text-gray-700 transition ease-in-out focus:border-blue-600 focus:bg-white focus:text-gray-700 focus:outline-none"
+                          id="game-name"
+                          placeholder="Name"
+                        />
                       </div>
-                    </div>
-                    <div class="mb-6 w-full px-3 md:mb-0 md:w-1/3">
-                      <label
-                        class="mb-2 block text-xs font-bold uppercase tracking-wide text-gray-700"
-                        for="grid-zip"
-                      >
-                        Zip
-                      </label>
-                      <input
-                        class="block w-full appearance-none rounded border border-gray-200 bg-gray-200 py-3 px-4 leading-tight text-gray-700 focus:border-gray-500 focus:bg-white focus:outline-none"
-                        id="grid-zip"
-                        type="text"
-                        placeholder="90210"
-                      />
-                    </div>
+                      <div className="mb-4">
+                        <input
+                          type="text"
+                          className="form-control m-0 block w-full rounded border border-solid border-gray-300 bg-white bg-clip-padding px-3 py-1.5 text-base font-normal text-gray-700 transition ease-in-out focus:border-blue-600 focus:bg-white focus:text-gray-700 focus:outline-none"
+                          id="game-description"
+                          placeholder="Description"
+                        />
+                      </div>
+                      <div className="mb-4">
+                        <input
+                          type="text"
+                          className="form-control m-0 block w-full rounded border border-solid border-gray-300 bg-white bg-clip-padding px-3 py-1.5 text-base font-normal text-gray-700 transition ease-in-out focus:border-blue-600 focus:bg-white focus:text-gray-700 focus:outline-none"
+                          id="game-location"
+                          placeholder="Location"
+                        />
+                      </div>
+                      <div className="mb-4">
+                        <input
+                          type="text"
+                          className="form-control m-0 block w-full rounded border border-solid border-gray-300 bg-white bg-clip-padding px-3 py-1.5 text-base font-normal text-gray-700 transition ease-in-out focus:border-blue-600 focus:bg-white focus:text-gray-700 focus:outline-none"
+                          id="game-price"
+                          placeholder="Price"
+                        />
+                      </div>
+                      <div className="mb-4">
+                        <input
+                          type="number"
+                          className="form-control
+                          m-0
+                          block
+                          w-full
+                          rounded
+                          border
+                          border-solid
+                          border-gray-300
+                          bg-white bg-clip-padding
+                          px-3 py-1.5 text-base
+                          font-normal
+                          text-gray-700
+                          transition
+                          ease-in-out
+                          focus:border-blue-600 focus:bg-white focus:text-gray-700 focus:outline-none"
+                          id="game-remaining-slot"
+                          placeholder="Remaining slot"
+                        />
+                      </div>
+                      <div className="mb-8 pt-1 pb-1 text-center">
+                        <button
+                          className="mb-3 inline-block w-full rounded bg-cyan-500 px-6 py-2.5 text-xs font-medium uppercase leading-tight text-white shadow-md transition duration-150 ease-in-out hover:bg-blue-700 hover:shadow-lg focus:shadow-lg focus:outline-none focus:ring-0 active:shadow-lg"
+                          type="button"
+                          data-mdb-ripple="true"
+                          data-mdb-ripple-color="light"
+                          onClick={onClick}
+                        >
+                          Create game
+                        </button>
+                      </div>
+                    </form>
                   </div>
-                </form>
+                </div>
+                <div className="flex items-center rounded-b-lg lg:w-6/12 lg:rounded-r-lg lg:rounded-bl-none">
+                  <div className="flex w-full items-center justify-center">
+                    <label
+                      for="dropzone-file"
+                      className="dark:hover:bg-bray-800 h-120 bg-white-50 dark:border-white-600 dark:bg-white-700 flex w-4/5 cursor-pointer flex-col items-center justify-center rounded-lg border-2 border-dashed border-gray-300 hover:bg-gray-100 dark:hover:border-gray-500 dark:hover:bg-gray-600"
+                    >
+                      <div className="flex flex-col items-center justify-center pt-5 pb-6">
+                        <svg
+                          aria-hidden="true"
+                          className="mb-3 h-10 w-10 text-gray-400"
+                          fill="none"
+                          stroke="currentColor"
+                          viewBox="0 0 24 24"
+                          xmlns="http://www.w3.org/2000/svg"
+                        >
+                          <path
+                            stroke-linecap="round"
+                            stroke-linejoin="round"
+                            stroke-width="2"
+                            d="M7 16a4 4 0 01-.88-7.903A5 5 0 1115.9 6L16 6a5 5 0 011 9.9M15 13l-3-3m0 0l-3 3m3-3v12"
+                          ></path>
+                        </svg>
+                        <p className="mb-2 text-sm text-gray-500 dark:text-gray-400">
+                          <span className="font-semibold">Click to upload</span>{" "}
+                          or drag and drop
+                        </p>
+                        <p className="text-xs text-gray-500 dark:text-gray-400">
+                          SVG, PNG, JPG or GIF (MAX. 800x400px)
+                        </p>
+                      </div>
+                      <input id="dropzone-file" type="file" class="hidden" />
+                    </label>
+                  </div>
+                </div>
               </div>
             </div>
           </div>
