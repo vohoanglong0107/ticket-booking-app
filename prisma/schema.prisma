@@ -45,6 +45,16 @@ model Booking {
   game                   Game?   @relation(fields: [game_id], references: [id])
 }
 
+
+model Voucher {
+  id                String   @id @default(uuid())
+  id_game           String   
+  id_user           String
+  discount          Float
+  remaining_amount  Int
+  status            Boolean
+}
+
 enum Role {
   USER
   ADMIN

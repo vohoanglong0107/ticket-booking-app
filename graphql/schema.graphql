@@ -29,6 +29,7 @@ type Query {
   bookings: [Booking]!
   games: [Game]!
   user(id: String): User
+  vouchers: [Voucher]!
 }
 
 enum Role {
@@ -43,4 +44,13 @@ type User {
   id: String
   name: String
   role: Role
+}
+
+type Voucher {
+  discount: Float
+  id: String
+  id_game: String
+  id_user: String
+  remaining_amount: Int
+  status: Boolean
 }
