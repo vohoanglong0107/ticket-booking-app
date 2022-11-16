@@ -2,6 +2,13 @@
 ### Do not make changes to this file directly
 
 
+type Booking {
+  game: Game
+  number_of_participants: Int
+  payment_status: Boolean
+  user: User
+}
+
 type Game {
   description: String
   id: String
@@ -12,12 +19,14 @@ type Game {
 }
 
 type Mutation {
+  booking(game_id: String, number_of_participants: Int, payment_status: Boolean, user_id: String): Booking
   game(description: String, location: String, name: String, price: Float, remaining_slot: Int): Game
   updateGame(description: String, id: String, location: String, name: String, price: Float, remaining_slot: Int): Game
   user(avatarURL: String, email: String, id: String, name: String, role: Role): User
 }
 
 type Query {
+  bookings: [Booking]!
   games: [Game]!
   user(id: String): User
   vouchers: [Voucher]!
