@@ -13,40 +13,36 @@ datasource db {
 }
 
 model User {
-  id        String   @id @default(uuid())
-  createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
-  email     String   @unique
+  id        String    @id @default(uuid())
+  createdAt DateTime  @default(now())
+  updatedAt DateTime  @updatedAt
+  email     String    @unique
   name      String
   avatarURL String?
-  role      Role     @default(USER)
-  Booking   Booking[]
+  role      Role      @default(USER)
+  bookings  Booking[]
 }
 
 model Game {
-  id              String   @id @default(uuid())
-  createdAt       DateTime @default(now())
-  updatedAt       DateTime @updatedAt
-  name            String
-  description     String?
-  location        String
-  price           Float
-  remaining_slot  Int
-  Booking         Booking[]
+  id             String    @id @default(uuid())
+  createdAt      DateTime  @default(now())
+  updatedAt      DateTime  @updatedAt
+  name           String
+  description    String?
+  location       String
+  price          Float
+  remaining_slot Int
+  bookings       Booking[]
 }
 
 model Booking {
-  
-  id              String   @id @default(uuid())
-  number_of_participants  Int
-  payment_status  Boolean
-  user_id         String?
-  game_id         String?
-  User            User?   @relation(fields: [user_id], references: [id])
-  Game            Game?   @relation(fields: [game_id], references: [id])
-  
-
-
+  id                     String  @id @default(uuid())
+  number_of_participants Int
+  payment_status         Boolean
+  user_id                String?
+  game_id                String?
+  user                   User?   @relation(fields: [user_id], references: [id])
+  game                   Game?   @relation(fields: [game_id], references: [id])
 }
 
 enum Role {
