@@ -16,6 +16,7 @@ type Game {
   name: String
   price: Float
   remaining_slot: Int
+  timeSlots: [TimeSlot]
 }
 
 type Mutation {
@@ -28,6 +29,7 @@ type Mutation {
 
 type Query {
   bookings: [Booking]!
+  game(game_id: String): Game
   games: [Game]!
   user(id: String): User
   vouchers: [Voucher]!
@@ -37,6 +39,13 @@ enum Role {
   ADMIN
   STORE_OWNER
   USER
+}
+
+type TimeSlot {
+  endTime: String
+  game_id: String
+  id: String
+  startTime: String
 }
 
 type User {
