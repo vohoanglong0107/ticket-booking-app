@@ -49,6 +49,16 @@ model Booking {
 
 }
 
+
+model Voucher {
+  id                String   @id @default(uuid())
+  id_game           String   
+  id_user           String
+  discount          Float
+  remaining_amount  Int
+  status            Boolean
+}
+
 enum Role {
   USER
   ADMIN

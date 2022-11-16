@@ -2,10 +2,6 @@
 ### Do not make changes to this file directly
 
 
-type Mutation {
-  user(avatarURL: String, email: String, id: String, name: String, role: Role): User
-}
-
 type Game {
   description: String
   id: String
@@ -18,11 +14,13 @@ type Game {
 type Mutation {
   game(description: String, location: String, name: String, price: Float, remaining_slot: Int): Game
   updateGame(description: String, id: String, location: String, name: String, price: Float, remaining_slot: Int): Game
+  user(avatarURL: String, email: String, id: String, name: String, role: Role): User
 }
 
 type Query {
   games: [Game]!
   user(id: String): User
+  vouchers: [Voucher]!
 }
 
 enum Role {
@@ -37,4 +35,13 @@ type User {
   id: String
   name: String
   role: Role
+}
+
+type Voucher {
+  discount: Float
+  id: String
+  id_game: String
+  id_user: String
+  remaining_amount: Int
+  status: Boolean
 }
