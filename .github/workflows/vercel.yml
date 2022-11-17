@@ -1,0 +1,147 @@
+name: GitHub Actions Vercel Deployment
+env:
+  VERCEL_ORG_ID: ${{ secrets.VERCEL_ORG_ID }}
+  VERCEL_PROJECT_ID: ${{ secrets.VERCEL_PROJECT_ID }}
+on:
+  push:
+  workflow_dispatch:
+  delete:
+jobs:
+  extract-branch-name:
+    if: github.event_name == 'push' || github.event_name == 'workflow_dispatch'
+    runs-on: ubuntu-latest
+    steps:
+      - name: Extract branch name
+        shell: bash
+        run: echo "branch=${GITHUB_REF#refs/heads/}" >> $GITHUB_OUTPUT
+        id: extract-branch
+    outputs:
+      branch: ${{ steps.extract-branch.outputs.branch }}
+
+  setup-database:
+    if: github.event_name == 'push' || github.event_name == 'workflow_dispatch'
+    needs: extract-branch-name
+    runs-on: ubuntu-latest
+    environment: Preview
+    container: postgres:15
+    env:
+      POSTGRES_USER: ${{ secrets.POSTGRES_USER }}
+      POSTGRES_PASSWORD: ${{ secrets.POSTGRES_PASSWORD }}
+    steps:
+      - name: Create database schema
+        if: needs.extract-branch-name.outputs.branch != 'master'
+        run: >
+          PGPASSWORD=${{ secrets.POSTGRES_PASSWORD }}
+          psql
+          -h ${{ secrets.PGHOST }}
+          -d ${{ secrets.PGDATABASE }}
+          -U ${{ secrets.POSTGRES_USER }}
+          -c "CREATE SCHEMA IF NOT EXISTS \"${{ needs.extract-branch-name.outputs.branch }}\" AUTHORIZATION ${{ secrets.POSTGRES_USER }};"
+      - name: Output schema name
+        run: |
+          if [[ "${{ needs.extract-branch-name.outputs.branch }}" == "master" ]]; then
+            echo "schema-name=production" >> $GITHUB_OUTPUT
+          else
+            echo "schema-name=${{ needs.extract-branch-name.outputs.branch }}" >> $GITHUB_OUTPUT
+          fi
+        id: output-schema-name
+    outputs:
+      schema-name: ${{ steps.output-schema-name.outputs.schema-name }}
+
+  run-database-migrations:
+    if: github.event_name == 'push' || github.event_name == 'workflow_dispatch'
+    needs: setup-database
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+      - name: setup node
+        uses: actions/setup-node@v3
+        with:
+          node-version: "16"
+          cache: "npm"
+      - name: install dependencies
+        run: npm ci
+      - name: Create Database connection string
+        run: echo "DATABASE_URL=${{ secrets.DATABASE_URL }}?schema=${{ needs.setup-database.outputs.schema-name }}" >> .env
+      - name: Run Database Migrations
+        run: npx prisma migrate deploy
+
+  deploy-preview:
+    if: (github.event_name == 'push' || github.event_name == 'workflow_dispatch') && github.ref != 'refs/heads/master'
+    needs: setup-database
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2
+      - name: Install Vercel CLI
+        run: npm install --global vercel@latest
+      - name: Pull Vercel Environment Information
+        run: vercel pull --yes --environment=preview --token=${{ secrets.VERCEL_TOKEN }}
+      - name: Add Database staging environment variables
+        # https://github.com/vercel/next.js/discussions/16429#discussioncomment-1302156
+        run: |
+          echo "DATABASE_URL=${{ secrets.DATABASE_URL }}?schema=${{ needs.setup-database.outputs.schema-name }}" >> .env.production
+      - uses: amondnet/vercel-action@v20
+        id: deploy
+        with:
+          github-token: ${{ secrets.GITHUB_TOKEN }}
+          vercel-token: ${{ secrets.VERCEL_TOKEN }}
+          vercel-org-id: ${{ secrets.VERCEL_ORG_ID }}
+          vercel-project-id: ${{ secrets.VERCEL_PROJECT_ID }}
+      - name: Show Deployment URL
+        run: echo ${{ steps.deploy.outputs.preview-url }}
+    environment:
+      name: Preview
+      url: ${{ steps.deploy.outputs.preview-url }}
+    outputs:
+      preview-url: ${{ steps.deploy.outputs.preview-url }}
+
+  deploy-production:
+    if: (github.event_name == 'push' || github.event_name == 'workflow_dispatch') && github.ref == 'refs/heads/master'
+    needs: setup-database
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2
+      - name: Install Vercel CLI
+        run: npm install --global vercel@latest
+      - name: Pull Vercel Environment Information
+        run: vercel pull --yes --environment=preview --token=${{ secrets.VERCEL_TOKEN }}
+      - name: Add Database staging environment variables
+        # https://github.com/vercel/next.js/discussions/16429#discussioncomment-1302156
+        run: |
+          echo "DATABASE_URL=${{ secrets.DATABASE_URL }}?schema=${{ needs.setup-database.outputs.schema-name }}" >> .env.production
+      - uses: amondnet/vercel-action@v20
+        id: deploy
+        with:
+          github-token: ${{ secrets.GITHUB_TOKEN }}
+          vercel-token: ${{ secrets.VERCEL_TOKEN }}
+          vercel-org-id: ${{ secrets.VERCEL_ORG_ID }}
+          vercel-project-id: ${{ secrets.VERCEL_PROJECT_ID }}
+          vercel-args: --prod
+      - name: Show Deployment URL
+        run: echo ${{ steps.deploy.outputs.preview-url }}
+    environment:
+      name: Production
+      url: ${{ steps.deploy.outputs.preview-url }}
+    outputs:
+      preview-url: ${{ steps.deploy.outputs.preview-url }}
+
+  cleanup-database:
+    if: github.event_name == 'delete' && github.event.ref_type == 'branch'
+    runs-on: ubuntu-latest
+    environment: Preview
+    container: postgres:15
+    env:
+      POSTGRES_USER: ${{ secrets.POSTGRES_USER }}
+      POSTGRES_PASSWORD: ${{ secrets.POSTGRES_PASSWORD }}
+    steps:
+      - name: Extract branch name
+        shell: bash
+        run: echo "branch=${{github.event.ref}}" >> $GITHUB_OUTPUT
+        id: extract-branch
+      - name: Remove Database Schema
+        run: >
+          PGPASSWORD=${{ secrets.POSTGRES_PASSWORD }}
+          psql -h ${{ secrets.PGHOST }}
+          -d ${{ secrets.PGDATABASE }}
+          -U ${{ secrets.POSTGRES_USER }}
+          -c "DROP SCHEMA IF EXISTS \"${{ steps.extract-branch.outputs.branch }}\" CASCADE;"
