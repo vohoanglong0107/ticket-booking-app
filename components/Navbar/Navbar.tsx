@@ -1,8 +1,10 @@
 import Link from "next/link";
-import Image from "next/image";
 import React, { useState } from "react";
+import { AuthUser } from "@/lib/auth";
 
 import NavItem from "./NavItem";
+import styles from "./Navbar.module.css";
+import classNames from "classnames";
 
 const MENU_LIST = [
   { text: "Lịch trò chơi", href: "/" },
@@ -10,27 +12,28 @@ const MENU_LIST = [
   { text: "Giới thiệu", href: "" },
   { text: "Về chúng tôi", href: "" },
 ];
-const Navbar = () => {
+
+interface NavbarProps {
+  user: AuthUser;
+}
+
+const Navbar = ({ user }: NavbarProps) => {
   const [navActive, setNavActive] = useState(null);
   const [activeIdx, setActiveIdx] = useState(-1);
 
   return (
-    <header>
-      <nav className={`nav`}>
+    <header className={styles.header}>
+      <nav className={styles.nav}>
         <Link legacyBehavior href={"/"}>
-          <a>
-            <h1 className="logo">SOCCIAL BOTTOM</h1>
+          <a className={styles["disabled-anchor"]}>
+            <h1>SOCCIAL BOTTOM</h1>
           </a>
         </Link>
         <div
-          onClick={() => setNavActive(!navActive)}
-          className={`nav__menu-bar`}
+          className={classNames(styles["nav__menu-list"], {
+            active: navActive,
+          })}
         >
-          <div></div>
-          <div></div>
-          <div></div>
-        </div>
-        <div className={`${navActive ? "active" : ""} nav__menu-list`}>
           {MENU_LIST.map((menu, idx) => (
             <div
               onClick={() => {
@@ -42,6 +45,11 @@ const Navbar = () => {
               <NavItem active={activeIdx === idx} {...menu} />
             </div>
           ))}
+          {user ? (
+            <NavItem href={"/logout"} text={"Logout"} active={false}></NavItem>
+          ) : (
+            <NavItem href={"/signin"} text={"Login"} active={false}></NavItem>
+          )}
         </div>
       </nav>
     </header>
