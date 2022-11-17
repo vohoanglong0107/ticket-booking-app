@@ -45,3 +45,7 @@ When we run `next dev` the next time, Next.js will start looking for any `.ts` o
 Next.js has built-in TypeScript declarations, so we'll get autocompletion for Next.js' modules straight away.
 
 A `type-check` script is also added to `package.json`, which runs TypeScript's `tsc` CLI in `noEmit` mode to run type-checking separately. You can then include this, for example, in your `test` scripts.
+
+## GraphQL VSCode extensions
+
+When the the extensions appear to not behave correctly, try to restart the graphql language server by running the command `VSCode GraphQL: Manual Restart` from the command palette.

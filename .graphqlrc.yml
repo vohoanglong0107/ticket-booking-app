@@ -1,0 +1,6 @@
+schema: "graphql/schema.graphql"
+documents:
+  [
+    "./pages/**/*.{graphql,js,ts,jsx,tsx}",
+    "./components/**/*.{graphql,js,ts,jsx,tsx}",
+  ]
