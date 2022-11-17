@@ -38,12 +38,13 @@ jobs:
           -U ${{ secrets.POSTGRES_USER }}
           -c "CREATE SCHEMA IF NOT EXISTS \"${{ needs.extract-branch-name.outputs.branch }}\" AUTHORIZATION ${{ secrets.POSTGRES_USER }};"
       - name: Output schema name
-        run: |
+        run: >
           if [[ "${{ needs.extract-branch-name.outputs.branch }}" == "master" ]]; then
             echo "schema-name=production" >> $GITHUB_OUTPUT
           else
             echo "schema-name=${{ needs.extract-branch-name.outputs.branch }}" >> $GITHUB_OUTPUT
           fi
+        shell: bash
         id: output-schema-name
     outputs:
       schema-name: ${{ steps.output-schema-name.outputs.schema-name }}
