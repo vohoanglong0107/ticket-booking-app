@@ -1,10 +1,16 @@
-import { objectType, extendType, enumType,
+import {
+  objectType,
+  extendType,
+  enumType,
   queryType,
   stringArg,
   mutationField,
   mutationType,
   floatArg,
-  intArg, } from "nexus";
+  intArg,
+} from "nexus";
+import { type } from "os";
+import { TimeSlot } from "./TimeSlot";
 
 export const Game = objectType({
   name: "Game",
@@ -15,6 +21,9 @@ export const Game = objectType({
     t.string("location");
     t.float("price");
     t.int("remaining_slot");
+    t.list.field("timeSlots", {
+      type: TimeSlot,
+    });
   },
 });
 
@@ -25,6 +34,37 @@ export const GameQuery = extendType({
       type: Game,
       async resolve(_parent, _args, context) {
         return context.prisma.game.findMany();
+      },
+    });
+  },
+});
+
+export const GameQueryById = extendType({
+  type: "Query",
+  definition(t) {
+    t.field("game", {
+      type: Game,
+      args: {
+        game_id: stringArg(),
+      },
+      async resolve(parent, args, context) {
+        const game = await context.prisma.game.findUnique({
+          where: {
+            id: args.game_id,
+          },
+          include: {
+            timeSlots: true,
+          },
+        });
+        const gameWithStringDatetime = {
+          ...game,
+          timeSlots: game.timeSlots.map((timeSlot) => ({
+            ...timeSlot,
+            startTime: timeSlot.startTime.toString(),
+            endTime: timeSlot.endTime.toString(),
+          })),
+        };
+        return gameWithStringDatetime;
       },
     });
   },
@@ -72,8 +112,8 @@ export const GameUpdate = extendType({
       },
       async resolve(_, args, context) {
         return context.prisma.game.update({
-          where:{
-            id: args.id
+          where: {
+            id: args.id,
           },
           data: {
             name: args.name,
