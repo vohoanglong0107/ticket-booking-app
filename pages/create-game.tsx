@@ -1,16 +1,17 @@
 import Link from "next/link";
 import Layout from "../components/Layout";
+import GameRegisterForm from "@/components/GameRegister";
 
-const CreateGame = () => (
-  <>
-    <h1>About</h1>
-    <p>This is the create game page</p>
-    <p>
+const CreateGame = () => {
+  const onClickEvent = () => {};
+
+  return (
+    <section>
       <Link href="/">
-        <a>Go home</a>
+        <GameRegisterForm onClick={onClickEvent} />
       </Link>
-    </p>
-  </>
-);
+    </section>
+  );
+};
 
 export default CreateGame;
