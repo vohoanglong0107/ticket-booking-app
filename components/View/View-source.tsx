@@ -5,20 +5,26 @@ import ImageListItemBar from "@mui/material/ImageListItemBar";
 import ListSubheader from "@mui/material/ListSubheader";
 import IconButton from "@mui/material/IconButton";
 import InfoIcon from "@mui/icons-material/Info";
+import styles from "./View-source.module.css";
 
 export default function TitlebarImageList() {
   return (
-    <ImageList cols={3}>
-      {itemData.map((item) => (
-        <ImageListItem key={item.img}>
-          <img src={item.img} />
-          <ImageListItemBar
-            style={{ textAlign: "center" }}
-            title={item.title}
-          />
-        </ImageListItem>
-      ))}
-    </ImageList>
+    <div className={styles.div}>
+      <ImageList cols={3}>
+        {itemData.map((item) => (
+          <ImageListItem key={item.img} style={{ padding: "30px" }}>
+            <img
+              src={item.img}
+              style={{ borderRadius: "44px 44px 44px 44px" }}
+            />
+            <ImageListItemBar
+              style={{ textAlign: "center", padding: "20px" }}
+              title={item.title}
+            />
+          </ImageListItem>
+        ))}
+      </ImageList>
+    </div>
   );
 }
 
