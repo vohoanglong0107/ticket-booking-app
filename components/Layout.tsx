@@ -2,7 +2,7 @@ import React, { ReactNode } from "react";
 import Head from "next/head";
 import Navbar from "./Navbar";
 import Footer from "./Footer";
-import { useAuth } from "@/lib/auth";
+import { useSession } from "next-auth/react";
 
 type Props = {
   children?: ReactNode;
@@ -10,7 +10,7 @@ type Props = {
 };
 
 const Layout = ({ children, title = "This is the default title" }: Props) => {
-  const { user } = useAuth();
+  const { data: session } = useSession();
   return (
     <div>
       <Head>
@@ -18,7 +18,7 @@ const Layout = ({ children, title = "This is the default title" }: Props) => {
         <meta charSet="utf-8" />
         <meta name="viewport" content="initial-scale=1.0, width=device-width" />
       </Head>
-      <Navbar user={user} />
+      <Navbar user={session?.user} />
       {children}
       <Footer />
     </div>

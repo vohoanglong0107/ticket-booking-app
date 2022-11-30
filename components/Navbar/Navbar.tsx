@@ -1,10 +1,10 @@
 import Link from "next/link";
 import React, { useState } from "react";
-import { AuthUser } from "@/lib/auth";
-
 import NavItem from "./NavItem";
 import styles from "./Navbar.module.css";
 import classNames from "classnames";
+import { Session } from "next-auth";
+import { signOut } from "next-auth/react";
 
 const MENU_LIST = [
   { text: "Lịch trò chơi", href: "/" },
@@ -14,7 +14,7 @@ const MENU_LIST = [
 ];
 
 interface NavbarProps {
-  user: AuthUser;
+  user: Session["user"];
 }
 
 const Navbar = ({ user }: NavbarProps) => {
@@ -46,7 +46,7 @@ const Navbar = ({ user }: NavbarProps) => {
             </div>
           ))}
           {user ? (
-            <NavItem href={"/logout"} text={"Logout"} active={false}></NavItem>
+            <NavItem onClick={signOut} text={"Logout"} active={false}></NavItem>
           ) : (
             <NavItem href={"/signin"} text={"Login"} active={false}></NavItem>
           )}
