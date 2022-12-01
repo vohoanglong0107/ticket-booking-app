@@ -21,17 +21,17 @@ type Game {
 
 type Mutation {
   booking(game_id: String, number_of_participants: Int, payment_status: Boolean, user_id: String): Booking
-  createUser(avatarURL: String, email: String, name: String, role: Role): User
+  createUser(address: String, avatarURL: String, email: String, firstName: String, lastName: String, role: Role): User
   game(description: String, location: String, name: String, price: Float, remaining_slot: Int): Game
   updateGame(description: String, id: String, location: String, name: String, price: Float, remaining_slot: Int): Game
-  user(avatarURL: String, email: String, id: String, name: String, role: Role): User
+  user(address: String, avatarURL: String, email: String, firstName: String, id: String, lastName: String, role: Role): User
 }
 
 type Query {
   bookings: [Booking]!
   game(game_id: String): Game
   games: [Game]!
-  user(id: String): User
+  user(email: String): User
   vouchers: [Voucher]!
 }
 
@@ -49,10 +49,12 @@ type TimeSlot {
 }
 
 type User {
+  address: String
   avatarURL: String
   email: String
+  firstName: String
   id: String
-  name: String
+  lastName: String
   role: Role
 }
 

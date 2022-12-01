@@ -43,7 +43,11 @@ export const BookingQuery = extendType({
         return context.prisma.booking.findMany({
           include: {
             user: true,
-            game: true,
+            game: {
+              include: {
+                timeSlots: true,
+              },
+            },
           },
         });
       },
