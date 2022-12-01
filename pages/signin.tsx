@@ -1,20 +1,40 @@
 import SignIn from "@/components/SignIn";
-import { useAuth } from "@/lib/auth";
+import { unstable_getServerSession } from "next-auth/next";
+import type { GetServerSideProps } from "next";
 import { useRouter } from "next/router";
-import { NextPageWithLayout } from "./_app";
+import type { NextPageWithLayout } from "./_app";
+import { signIn } from "next-auth/react";
+import { authOptions } from "@/pages/api/auth/[...nextauth]";
+
+export const getServerSideProps: GetServerSideProps = async ({ req, res }) => {
+  const session = await unstable_getServerSession(req, res, authOptions);
+  if (session) {
+    return {
+      redirect: {
+        destination: "/",
+      },
+      props: {},
+    };
+  }
+  return {
+    props: {},
+  };
+};
 
 const SignInPage: NextPageWithLayout = () => {
   const router = useRouter();
-  const { login } = useAuth();
 
   const onSignIn = async (email: string, password: string) => {
-    try {
-      console.log("Signing in...");
-      await login(email, password);
-      console.log("Signed in successfully");
+    const { ok, error } = await signIn("credentials", {
+      email: email,
+      password: password,
+      redirect: false,
+    });
+    if (error) {
+      console.log(error);
+    }
+    if (ok) {
       router.push("/");
-    } catch (error) {
-      console.error(error);
     }
   };
 

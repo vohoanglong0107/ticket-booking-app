@@ -16,7 +16,7 @@
 }
 .nav {
   display: flex;
-  padding: 16px;
+  padding: 5px;
   justify-content: space-between;
   align-items: center;
   background-color: #f1f1f1;
@@ -67,7 +67,7 @@
   -webkit-background-clip: text;
   color:  #FFFFFF;
   padding-top: 20px;
-  font-size: 20px;
+  font-size: 10px;
   font-family: 'Bungee', cursive;
   animation: filling 3s ease forwards;
 }
@@ -79,18 +79,20 @@
     min-height: fit-content;
     width: fit-content;
     column-gap: 24px;
-    align-items: center;
     border-style: outset;
   }
   .container_text {
-    padding-left: 350px;
-    text-align: center;
+    padding-left: 10px;
+    padding-right: 10px;
+    text-align: left;
+    
+    /* text-align: l; */
     background-image:  url(https://static.pexels.com/photos/4827/nature-forest-trees-fog.jpeg);
     -webkit-text-fill-color: transparent;
     -webkit-background-clip: text;
     color:  #FFFFFF;
-    padding-top: 20px;
-    font-size: 80px;
+    padding-bottom: 60px;
+    font-size: 40px;
     font-family: 'Bungee', cursive;
     animation: filling 3s ease forwards;
   }
