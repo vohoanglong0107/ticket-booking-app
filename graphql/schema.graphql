@@ -21,6 +21,7 @@ type Game {
 
 type Mutation {
   booking(game_id: String, number_of_participants: Int, payment_status: Boolean, user_id: String): Booking
+  createTimeSlot(endTime: String, game_id: String, startTime: String): TimeSlot
   createUser(avatarURL: String, email: String, name: String, role: Role): User
   game(description: String, location: String, name: String, price: Float, remaining_slot: Int): Game
   updateGame(description: String, id: String, location: String, name: String, price: Float, remaining_slot: Int): Game
@@ -31,6 +32,8 @@ type Query {
   bookings: [Booking]!
   game(game_id: String): Game
   games: [Game]!
+  timeSlotByGameId(game_id: String): TimeSlot
+  timeslots: [TimeSlot]!
   user(id: String): User
   vouchers: [Voucher]!
 }
