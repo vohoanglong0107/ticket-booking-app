@@ -55,14 +55,12 @@ const CreateGamePage = () => {
         },
       });
       setCreateGameErrors(null);
-      return true;
     } catch (error) {
       setCreateGameErrors([error.message]);
       alert(error);
       console.log(error);
       console.log(error.networkError);
       console.log(error.graphQLErrors);
-      return false;
     }
   };
 

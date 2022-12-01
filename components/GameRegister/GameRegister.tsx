@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 // import Image from "next/image";
 
 // import '../../styles/globals.css'
@@ -9,13 +9,25 @@ export interface CreateGameFormProps {
     location: string,
     price: number,
     remaining_slot: number
-  ) => boolean;
+  ) => void;
   errors?: string[];
 }
 export default function GameRegisterForm({
   onCreateGame,
   errors,
 }: CreateGameFormProps) {
+  useEffect(() => {
+    if (!errors)
+      setGameRegisterData({
+        name: "",
+        description: "",
+        location: "",
+        price: 0,
+        remaining_slot: 0,
+        file: false,
+      });
+  }, [errors]);
+
   const [gameRegisterData, setGameRegisterData] = useState({
     name: "",
     description: "",
@@ -55,16 +67,6 @@ export default function GameRegisterForm({
       parseFloat(String(gameRegisterData.price)),
       parseInt(String(gameRegisterData.remaining_slot))
     );
-    if (status)
-      setGameRegisterData({
-        name: "",
-        description: "",
-        location: "",
-        price: 0,
-        remaining_slot: 0,
-        file: false,
-      });
-    alert("Create game successfully");
   };
 
   const cancelImageEvent = (e) => {
