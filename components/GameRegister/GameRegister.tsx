@@ -2,23 +2,35 @@ import React, { useState } from "react";
 // import Image from "next/image";
 
 // import '../../styles/globals.css'
-
-export default function GameRegisterForm({ onClick }) {
-  const [gameRegisterForm, setGameRegisterForm] = useState({
+export interface CreateGameFormProps {
+  onCreateGame: (
+    name: string,
+    description: string,
+    location: string,
+    price: number,
+    remaining_slot: number
+  ) => boolean;
+  errors?: string[];
+}
+export default function GameRegisterForm({
+  onCreateGame,
+  errors,
+}: CreateGameFormProps) {
+  const [gameRegisterData, setGameRegisterData] = useState({
     name: "",
     description: "",
     location: "",
     price: 0,
-    remainingSlot: 0,
+    remaining_slot: 0,
     file: false,
   });
 
-  const { name, description, location, price, remainingSlot, file } =
-    gameRegisterForm;
+  const { name, description, location, price, remaining_slot, file } =
+    gameRegisterData;
 
   const onchangeGameRegisterData = (event) => {
-    setGameRegisterForm({
-      ...gameRegisterForm,
+    setGameRegisterData({
+      ...gameRegisterData,
       [event.target.name]: event.target.value,
     });
     var input = document.getElementById("dropzone-file") as HTMLInputElement;
@@ -33,15 +45,32 @@ export default function GameRegisterForm({ onClick }) {
     // console.log((document.getElementById('dropzone-file') as HTMLInputElement).files[0].path);
   };
   //e: React.FormEvent<HTMLFormElement>
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
-    console.log(gameRegisterForm);
+    // console.log(gameRegisterForm);
+    let status = await onCreateGame(
+      gameRegisterData.name,
+      gameRegisterData.description,
+      gameRegisterData.location,
+      parseFloat(String(gameRegisterData.price)),
+      parseInt(String(gameRegisterData.remaining_slot))
+    );
+    if (status)
+      setGameRegisterData({
+        name: "",
+        description: "",
+        location: "",
+        price: 0,
+        remaining_slot: 0,
+        file: false,
+      });
+    alert("Create game successfully");
   };
 
   const cancelImageEvent = (e) => {
     (document.getElementById("dropzone-file") as HTMLInputElement).value = null;
-    setGameRegisterForm({
-      ...gameRegisterForm,
+    setGameRegisterData({
+      ...gameRegisterData,
       file: false,
     });
   };
@@ -125,8 +154,8 @@ export default function GameRegisterForm({ onClick }) {
                           focus:border-blue-600 focus:bg-white focus:text-gray-700 focus:outline-none"
                           id="game-remaining-slot"
                           placeholder="Remaining slot"
-                          name="remainingSlot"
-                          value={remainingSlot}
+                          name="remaining_slot"
+                          value={remaining_slot}
                           onChange={onchangeGameRegisterData}
                         />
                       </div>
