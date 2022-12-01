@@ -1,18 +1,32 @@
 import { useState } from "react";
-export default function UserProfileForm({ onClick }) {
-  const [firstName, setFirstName] = useState("");
-  const [email, setEmail] = useState("");
-  const [lastName, setLastName] = useState("");
-  const [address, setAddress] = useState("");
+
+interface Props {
+  firstName: string;
+  lastName: string;
+  address: string;
+  email: string;
+  onClick: (
+    firstName: string,
+    lastName: string,
+    address: string,
+    email: string
+  ) => void;
+}
+export default function UserProfileForm({
+  firstName: firstNameProp,
+  email: emailProp,
+  lastName: lastNameProp,
+  address: addressProp,
+  onClick,
+}: Props) {
+  const [firstName, setFirstName] = useState(firstNameProp);
+  const [email, setEmail] = useState(emailProp);
+  const [lastName, setLastName] = useState(lastNameProp);
+  const [address, setAddress] = useState(addressProp);
 
   function click(e) {
     e.preventDefault();
     onClick(lastName, firstName, address, email);
-    setAddress("");
-    setLastName("");
-    setFirstName("");
-    setEmail("");
-    setAddress("");
   }
 
   return (

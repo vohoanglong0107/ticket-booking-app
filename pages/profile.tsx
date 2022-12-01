@@ -2,7 +2,9 @@ import { NextPageWithLayout } from "./_app";
 import UserProfileForm from "../components/UserProfile/UserProfileForm";
 import { gql, useMutation, useQuery } from "@apollo/client";
 import { Role } from "@prisma/client";
-import { CatchingPokemon } from "@mui/icons-material";
+import { Session, unstable_getServerSession } from "next-auth";
+import { authOptions } from "./api/auth/[...nextauth]";
+import { GetServerSideProps, InferGetServerSidePropsType } from "next";
 
 const editUserProfile = gql`
   mutation Mutation(
@@ -33,22 +35,46 @@ const queryUserByEmail = gql`
   query Query($email: String) {
     user(email: $email) {
       id
-      name
+      firstName
+      lastName
       email
       avatarURL
       role
+      address
     }
   }
 `;
 
-const Profile: NextPageWithLayout = () => {
-  const updatene = () => {};
+export const getServerSideProps = async ({ req, res }) => {
+  const session = await unstable_getServerSession(req, res, authOptions);
+  if (!session) {
+    return {
+      redirect: {
+        destination: "/signin",
+      },
+      props: {},
+    };
+  }
+  return {
+    props: {
+      email: session.user.email,
+    },
+  };
+};
+
+const Profile: NextPageWithLayout<
+  InferGetServerSidePropsType<typeof getServerSideProps>
+> = ({ email }) => {
   const { data, error, loading } = useQuery(queryUserByEmail, {
-    variables: "test@gmail.com",
+    variables: { email },
   });
   const [editUser] = useMutation(editUserProfile);
-  const submit = (firstName, lastName, address, email) => {
-    console.log(firstName, lastName, address, email);
+  const submit = (
+    firstName: string,
+    lastName: string,
+    address: string,
+    email: string
+  ) => {
     editUser({
       variables: {
         firstName,
@@ -61,7 +87,19 @@ const Profile: NextPageWithLayout = () => {
     });
   };
 
-  return <UserProfileForm onClick={submit}></UserProfileForm>;
+  if (loading) return <p>loading</p>;
+
+  if (error) return <p>error</p>;
+
+  return (
+    <UserProfileForm
+      email={data.user.email}
+      firstName={data.user.firstName}
+      lastName={data.user.lastName}
+      address={data.user.address}
+      onClick={submit}
+    ></UserProfileForm>
+  );
 };
 
 export default Profile;
