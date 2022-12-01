@@ -16,18 +16,6 @@ export default function GameRegisterForm({
   onCreateGame,
   errors,
 }: CreateGameFormProps) {
-  useEffect(() => {
-    if (!errors)
-      setGameRegisterData({
-        name: "",
-        description: "",
-        location: "",
-        price: 0,
-        remaining_slot: 0,
-        file: false,
-      });
-  }, [errors]);
-
   const [gameRegisterData, setGameRegisterData] = useState({
     name: "",
     description: "",
@@ -57,10 +45,10 @@ export default function GameRegisterForm({
     // console.log((document.getElementById('dropzone-file') as HTMLInputElement).files[0].path);
   };
   //e: React.FormEvent<HTMLFormElement>
-  const handleSubmit = async (e) => {
+  const handleSubmit = (e) => {
     e.preventDefault();
     // console.log(gameRegisterForm);
-    let status = await onCreateGame(
+    onCreateGame(
       gameRegisterData.name,
       gameRegisterData.description,
       gameRegisterData.location,
@@ -161,6 +149,18 @@ export default function GameRegisterForm({
                           onChange={onchangeGameRegisterData}
                         />
                       </div>
+                      {errors && (
+                        <div
+                          className="relative rounded border border-red-400 bg-red-100 px-4 py-3 text-red-700"
+                          role="alert"
+                        >
+                          <ul>
+                            {errors.map((error) => (
+                              <li key={error}>{error}</li>
+                            ))}
+                          </ul>
+                        </div>
+                      )}
                       <div className="mb-8 pt-1 pb-1 text-center">
                         <button
                           className="mb-3 inline-block w-full rounded bg-cyan-500 px-6 py-2.5 text-xs font-medium uppercase leading-tight text-white shadow-md transition duration-150 ease-in-out hover:bg-blue-700 hover:shadow-lg focus:shadow-lg focus:outline-none focus:ring-0 active:shadow-lg"

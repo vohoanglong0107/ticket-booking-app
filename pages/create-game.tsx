@@ -3,7 +3,7 @@ import Layout from "../components/Layout";
 import GameRegisterForm from "@/components/GameRegister";
 import { gql, useMutation } from "@apollo/client";
 import { useState } from "react";
-import { Router } from "@mui/icons-material";
+import { useRouter } from "next/router";
 
 const createGameMutation = gql`
   mutation Mutation(
@@ -30,6 +30,7 @@ const createGameMutation = gql`
 `;
 
 const CreateGamePage = () => {
+  const router = useRouter();
   const [createGame, { data, loading, error }] =
     useMutation(createGameMutation);
 
@@ -45,6 +46,7 @@ const CreateGamePage = () => {
   ) => {
     try {
       console.log(name, description, location, price, remaining_slot);
+      if (!name) throw Error("Game name is required");
       await createGame({
         variables: {
           name,
@@ -55,9 +57,10 @@ const CreateGamePage = () => {
         },
       });
       setCreateGameErrors(null);
+      alert("Create game successfully");
+      router.reload();
     } catch (error) {
       setCreateGameErrors([error.message]);
-      alert(error);
       console.log(error);
       console.log(error.networkError);
       console.log(error.graphQLErrors);
