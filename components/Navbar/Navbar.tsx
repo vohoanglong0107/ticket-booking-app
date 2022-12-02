@@ -26,9 +26,16 @@ const Navbar = ({ user }: NavbarProps) => {
       <nav className={styles.nav}>
         <Link legacyBehavior href={"/"}>
           <a className={styles["disabled-anchor"]}>
-            <h1>SOCCIAL BOTTOM</h1>
+            <a>
+              <h1 className={styles.logo}>
+                <img src="https://lzd-img-global.slatic.net/g/p/912a995390dff7f26a1bc98ef76ba7bc.jpg_720x720q80.jpg_.webp" />
+              </h1>
+            </a>
           </a>
         </Link>
+        <div>
+          <h1 className={styles.container_text}>SOCIAL BOTTOM</h1>
+        </div>
         <div
           className={classNames(styles["nav__menu-list"], {
             active: navActive,
