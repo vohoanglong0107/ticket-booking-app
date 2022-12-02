@@ -14,7 +14,12 @@ const createUserMutation = gql`
     $role: Role
     $avatarUrl: String
   ) {
-    createUser(name: $name, email: $email, role: $role, avatarURL: $avatarUrl) {
+    createUser(
+      firstName: $name
+      email: $email
+      role: $role
+      avatarURL: $avatarUrl
+    ) {
       email
       id
     }

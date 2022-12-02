@@ -1,7 +1,36 @@
-import React from "react";
-export default function UserProfileForm({ onClick }) {
+import { useState } from "react";
+
+interface Props {
+  firstName: string;
+  lastName: string;
+  address: string;
+  email: string;
+  onClick: (
+    firstName: string,
+    lastName: string,
+    address: string,
+    email: string
+  ) => void;
+}
+export default function UserProfileForm({
+  firstName: firstNameProp,
+  email: emailProp,
+  lastName: lastNameProp,
+  address: addressProp,
+  onClick,
+}: Props) {
+  const [firstName, setFirstName] = useState(firstNameProp);
+  const [email, setEmail] = useState(emailProp);
+  const [lastName, setLastName] = useState(lastNameProp);
+  const [address, setAddress] = useState(addressProp);
+
+  function click(e) {
+    e.preventDefault();
+    onClick(lastName, firstName, address, email);
+  }
+
   return (
-    <section className="gradient-form h-full bg-gray-200 md:h-screen">
+    <section className="gradient-form h-full bg-gray-200">
       <div className="container h-full py-12 px-6">
         <div className="g-6 flex h-full flex-wrap items-center justify-center text-gray-800">
           <div className="xl:w-8/12">
@@ -14,7 +43,10 @@ export default function UserProfileForm({ onClick }) {
                         User Profile
                       </h4>
                     </div>
-                    <div className="mb-6 grid gap-6 md:grid-cols-2">
+                    <form
+                      onSubmit={click}
+                      className="mb-6 grid gap-6 md:grid-cols-2"
+                    >
                       <div>
                         <label>First Name</label>
                         <input
@@ -22,6 +54,10 @@ export default function UserProfileForm({ onClick }) {
                           id="first_name"
                           className="block w-full rounded-lg border border-gray-300 bg-gray-50 p-2.5 text-sm text-gray-900 focus:border-blue-500 focus:ring-blue-500 dark:border-gray-600 dark:bg-gray-700 dark:text-white dark:placeholder-gray-400 dark:focus:border-blue-500 dark:focus:ring-blue-500"
                           placeholder="First Name"
+                          onChange={(e) => {
+                            setFirstName(e.target.value);
+                          }}
+                          value={firstName}
                         />
                       </div>
                       <div>
@@ -31,6 +67,8 @@ export default function UserProfileForm({ onClick }) {
                           id="last_name"
                           className="block w-full rounded-lg border border-gray-300 bg-gray-50 p-2.5 text-sm text-gray-900 focus:border-blue-500 focus:ring-blue-500 dark:border-gray-600 dark:bg-gray-700 dark:text-white dark:placeholder-gray-400 dark:focus:border-blue-500 dark:focus:ring-blue-500"
                           placeholder="Last Name"
+                          onChange={(e) => setLastName(e.target.value)}
+                          value={lastName}
                         />
                       </div>
                       <div>
@@ -49,6 +87,9 @@ export default function UserProfileForm({ onClick }) {
                           id="email"
                           className="block w-full rounded-lg border border-gray-300 bg-gray-50 p-2.5 text-sm text-gray-900 focus:border-blue-500 focus:ring-blue-500 dark:border-gray-600 dark:bg-gray-700 dark:text-white dark:placeholder-gray-400 dark:focus:border-blue-500 dark:focus:ring-blue-500"
                           placeholder="Email"
+                          onChange={(e) => setEmail(e.target.value)}
+                          value={email}
+                          required
                         />
                       </div>
                       <div>
@@ -66,9 +107,14 @@ export default function UserProfileForm({ onClick }) {
                           id="address"
                           className="block w-full rounded-lg border border-gray-300 bg-gray-50 p-2.5 text-sm text-gray-900 focus:border-blue-500 focus:ring-blue-500 dark:border-gray-600 dark:bg-gray-700 dark:text-white dark:placeholder-gray-400 dark:focus:border-blue-500 dark:focus:ring-blue-500"
                           placeholder="Address"
+                          onChange={(e) => setAddress(e.target.value)}
+                          value={address}
                         />
                       </div>
-                    </div>
+                      <button className="mx-auto rounded border border-blue-700 bg-blue-500 py-2 px-4 font-bold text-white hover:bg-blue-700">
+                        Button
+                      </button>
+                    </form>
                   </div>
                 </div>
                 <div className="flex items-center rounded-b-lg lg:w-4/12 lg:rounded-r-lg lg:rounded-bl-none">

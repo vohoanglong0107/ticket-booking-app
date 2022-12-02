@@ -11,9 +11,11 @@ export const User = objectType({
   name: "User",
   definition(t) {
     t.string("id");
-    t.string("name");
+    t.string("firstName");
+    t.string("lastName");
     t.string("email");
     t.string("avatarURL");
+    t.string("address");
     t.field("role", { type: Role });
   },
 });
@@ -29,10 +31,10 @@ export const UserQuery = extendType({
     t.field("user", {
       type: User,
       args: {
-        id: stringArg(),
+        email: stringArg(),
       },
       async resolve(_, args, context) {
-        return context.prisma.user.findUnique({ where: { id: args.id } });
+        return context.prisma.user.findUnique({ where: { email: args.email } });
       },
     });
   },
@@ -44,9 +46,11 @@ export const UserCreate = extendType({
     t.field("createUser", {
       type: User,
       args: {
-        name: stringArg(),
+        firstName: stringArg(),
+        lastName: stringArg(),
         email: stringArg(),
         avatarURL: stringArg(),
+        address: stringArg(),
         role: arg({
           type: Role,
         }),
@@ -54,7 +58,8 @@ export const UserCreate = extendType({
       async resolve(_, args, context) {
         return context.prisma.user.create({
           data: {
-            name: args.name,
+            firstName: args.firstName,
+            lastName: args.lastName,
             email: args.email,
             avatarURL: args.avatarURL,
             role: args.role,
@@ -72,21 +77,33 @@ export const UpdateUser = extendType({
       type: User,
       args: {
         id: stringArg(),
-        name: stringArg(),
+        firstName: stringArg(),
+        lastName: stringArg(),
+        address: stringArg(),
         email: stringArg(),
         avatarURL: stringArg(),
         role: Role,
       },
       async resolve(_, args, context) {
-        return context.prisma.user.update({
-          where: { id: args.id },
-          data: {
-            name: args.name,
-            email: args.email,
-            avatarURL: args.avatarURL,
-            role: args.role,
-          },
-        });
+        const updateData = {
+          firstName: args.firstName,
+          lastName: args.lastName,
+          email: args.email,
+          address: args.address,
+          avatarURL: args.avatarURL,
+          role: args.role,
+        };
+        if (args.id)
+          return context.prisma.user.update({
+            where: { id: args.id },
+            data: updateData,
+          });
+        else {
+          return context.prisma.user.update({
+            where: { email: args.email },
+            data: updateData,
+          });
+        }
       },
     });
   },
