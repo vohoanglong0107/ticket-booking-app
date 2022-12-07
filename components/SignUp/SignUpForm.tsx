@@ -47,36 +47,36 @@ export default function SignUpForm({
               }}
             />
 
-            <div class="mb-4 flex flex-row">
-              <div class="mr-2 flex flex-1 cursor-pointer items-center rounded border border-gray-200 pl-4">
+            <div className="mb-4 flex flex-row">
+              <div className="mr-2 flex flex-1 cursor-pointer items-center rounded border border-gray-200 pl-4">
                 <input
                   checked={role === "USER"}
                   id="bordered-radio-1"
                   type="radio"
                   value={role}
                   name="role"
-                  class="h-4 w-4 cursor-pointer bg-gray-100 text-blue-600"
+                  className="h-4 w-4 cursor-pointer bg-gray-100 text-blue-600"
                   onChange={(e) => setRole("USER")}
                 />
                 <label
                   for="bordered-radio-1"
-                  class="ml-2 w-full cursor-pointer py-4 text-sm font-medium text-gray-900 dark:text-gray-300"
+                  className="ml-2 w-full cursor-pointer py-4 text-sm font-medium text-gray-900 dark:text-gray-300"
                 >
                   Player
                 </label>
               </div>
-              <div class="ml-5 flex flex-1 cursor-pointer items-center rounded border border-gray-200 pl-4">
+              <div className="ml-5 flex flex-1 cursor-pointer items-center rounded border border-gray-200 pl-4">
                 <input
                   id="bordered-radio-2"
                   type="radio"
                   value={role}
                   name="role"
-                  class="h-4 w-4 cursor-pointer border-gray-300 bg-gray-100 text-blue-600"
+                  className="h-4 w-4 cursor-pointer border-gray-300 bg-gray-100 text-blue-600"
                   onChange={(e) => setRole("STORE_OWNER")}
                 />
                 <label
                   for="bordered-radio-2"
-                  class="ml-2 w-full cursor-pointer py-4 text-sm font-medium text-gray-900 dark:text-gray-300"
+                  className="ml-2 w-full cursor-pointer py-4 text-sm font-medium text-gray-900 dark:text-gray-300"
                 >
                   Store owner
                 </label>
