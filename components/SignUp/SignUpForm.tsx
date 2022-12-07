@@ -1,6 +1,11 @@
 import React from "react";
 export interface SignUpFormProps {
-  onSignUp: (name: string, email: string, password: string) => void;
+  onSignUp: (
+    name: string,
+    email: string,
+    password: string,
+    role: string
+  ) => void;
   loginPath: string;
   errors?: string[];
 }
@@ -11,11 +16,12 @@ export default function SignUpForm({
 }: SignUpFormProps) {
   const [name, setName] = React.useState("");
   const [email, setEmail] = React.useState("");
+  const [role, setRole] = React.useState("USER");
   const [password, setPassword] = React.useState("");
   const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
 
-    onSignUp(name, email, password);
+    onSignUp(name, email, password, role);
   };
   return (
     <div className="bg-grey-lighter flex min-h-screen flex-col">
@@ -36,9 +42,46 @@ export default function SignUpForm({
               className="border-grey-light mb-4 block w-full rounded border p-3"
               name="email"
               placeholder="Email"
-              onChange={(e) => setEmail(e.target.value)}
+              onChange={(e) => {
+                setEmail(e.target.value);
+              }}
             />
 
+            <div class="mb-4 flex flex-row">
+              <div class="mr-2 flex flex-1 cursor-pointer items-center rounded border border-gray-200 pl-4">
+                <input
+                  checked={role === "USER"}
+                  id="bordered-radio-1"
+                  type="radio"
+                  value={role}
+                  name="role"
+                  class="h-4 w-4 cursor-pointer bg-gray-100 text-blue-600"
+                  onChange={(e) => setRole("USER")}
+                />
+                <label
+                  for="bordered-radio-1"
+                  class="ml-2 w-full cursor-pointer py-4 text-sm font-medium text-gray-900 dark:text-gray-300"
+                >
+                  Player
+                </label>
+              </div>
+              <div class="ml-5 flex flex-1 cursor-pointer items-center rounded border border-gray-200 pl-4">
+                <input
+                  id="bordered-radio-2"
+                  type="radio"
+                  value={role}
+                  name="role"
+                  class="h-4 w-4 cursor-pointer border-gray-300 bg-gray-100 text-blue-600"
+                  onChange={(e) => setRole("STORE_OWNER")}
+                />
+                <label
+                  for="bordered-radio-2"
+                  class="ml-2 w-full cursor-pointer py-4 text-sm font-medium text-gray-900 dark:text-gray-300"
+                >
+                  Store owner
+                </label>
+              </div>
+            </div>
             <input
               type="password"
               className="border-grey-light mb-4 block w-full rounded border p-3"

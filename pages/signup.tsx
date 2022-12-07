@@ -30,14 +30,19 @@ const SignUpPage: NextPageWithLayout = () => {
   const router = useRouter();
   const [createUser] = useMutation(createUserMutation);
   const [signUpErrors, setSignUpErrors] = useState<null | string[]>(null);
-  const onSignUp = async (name: string, email: string, password: string) => {
+  const onSignUp = async (
+    name: string,
+    email: string,
+    password: string,
+    role: string
+  ) => {
     try {
       await createUserWithEmailAndPassword(auth, email, password);
       await createUser({
         variables: {
           name,
           email,
-          role: Role.USER,
+          role: role,
           avatarUrl: null,
         },
       });
