@@ -1,3 +1,4 @@
+import NavItem from "@/components/Navbar/NavItem";
 import {
   enumType,
   objectType,
@@ -7,6 +8,8 @@ import {
   arg,
 } from "nexus";
 
+import { Game } from "./Game";
+
 export const TimeSlot = objectType({
   name: "TimeSlot",
   definition(t) {
@@ -14,6 +17,9 @@ export const TimeSlot = objectType({
     t.string("startTime");
     t.string("endTime");
     t.string("game_id");
+    t.field("game", {
+      type: Game,
+    });
   },
 });
 
@@ -23,7 +29,17 @@ export const TimeSlotQuery = extendType({
     t.nonNull.list.field("timeslots", {
       type: TimeSlot,
       async resolve(_parent, _args, context) {
-        return context.prisma.timeSlot.findMany();
+        const timeSlot = await context.prisma.timeSlot.findMany();
+        const newArr = timeSlot.map((item) => {
+          {
+            return {
+              ...item,
+              startTime: item.startTime.toString().substring(16, 21),
+              endTime: item.endTime.toString().substring(16, 21),
+            };
+          }
+        });
+        return newArr;
       },
     });
   },
@@ -32,20 +48,33 @@ export const TimeSlotQuery = extendType({
 export const TimeSlotQueryByGameId = extendType({
   type: "Query",
   definition(t) {
-    t.field("timeSlotByGameId", {
+    t.nonNull.list.field("timeSlotByGameId", {
       type: TimeSlot,
       args: {
         game_id: stringArg(),
       },
-      async resolve(parent, args, context) {
-        const timeSlot = await context.prisma.timeSlot.findUnique({
+      async resolve(_, args, context) {
+        const timeSlot = await context.prisma.timeSlot.findMany({
           where: {
-            id: args.game_id,
+            game: {
+              id: args.game_id,
+            },
           },
           include: {
             game: true,
           },
         });
+
+        const newArr = timeSlot.map((item) => {
+          {
+            return {
+              ...item,
+              startTime: item.startTime.toString().substring(16, 21),
+              endTime: item.endTime.toString().substring(16, 21),
+            };
+          }
+        });
+        return newArr;
       },
     });
   },

@@ -32,7 +32,7 @@ type Query {
   bookings: [Booking]!
   game(game_id: String): Game
   games: [Game]!
-  timeSlotByGameId(game_id: String): TimeSlot
+  timeSlotByGameId(game_id: String): [TimeSlot]!
   timeslots: [TimeSlot]!
   user(id: String): User
   vouchers: [Voucher]!
@@ -46,6 +46,7 @@ enum Role {
 
 type TimeSlot {
   endTime: String
+  game: Game
   game_id: String
   id: String
   startTime: String
