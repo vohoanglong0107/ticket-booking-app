@@ -59,8 +59,8 @@ export default function SignUpForm({
                   onChange={(e) => setRole("USER")}
                 />
                 <label
-                  for="bordered-radio-1"
-                  className="ml-2 w-full cursor-pointer py-4 text-sm font-medium text-gray-900 dark:text-gray-300"
+                  htmlFor="bordered-radio-1"
+                  className="ml-2 w-full cursor-pointer py-4 text-sm font-medium text-gray-900 dark:text-gray-400"
                 >
                   Player
                 </label>
@@ -75,8 +75,8 @@ export default function SignUpForm({
                   onChange={(e) => setRole("STORE_OWNER")}
                 />
                 <label
-                  for="bordered-radio-2"
-                  className="ml-2 w-full cursor-pointer py-4 text-sm font-medium text-gray-900 dark:text-gray-300"
+                  htmlFor="bordered-radio-2"
+                  className="ml-2 w-full cursor-pointer py-4 text-sm font-medium text-gray-900 dark:text-gray-400"
                 >
                   Store owner
                 </label>
