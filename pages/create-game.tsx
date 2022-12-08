@@ -70,12 +70,12 @@ const CreateGamePage: NextPageWithLayout<
   const { data, error, loading } = useQuery(queryUserByEmail, {
     variables: { email },
   });
-  useEffect(() => {
-    const checkRole = () => {
-      if (data && data.user.role != "STORE_OWNER") router.push("/");
-    };
-    checkRole();
-  }, [data, router]);
+  // useEffect(() => {
+  //   const checkRole = () => {
+  //     if (data && data.user && "role" in data.user && data.user.role != "STORE_OWNER") router.push("/");
+  //   };
+  //   checkRole();
+  // }, [data, router]);
   const [createGame] = useMutation(createGameMutation);
 
   const [createGameErrors, setCreateGameErrors] = useState<null | string[]>(
@@ -111,9 +111,23 @@ const CreateGamePage: NextPageWithLayout<
     }
   };
 
+  // const checkRole = () => {
+  // };
+
   if (loading) return <p>loading</p>;
 
   if (error) return <p>error</p>;
+
+  // checkRole();
+  if (data && data.user && "role" in data.user) {
+    if (data.user.role != "STORE_OWNER") {
+      router.push("/");
+      return <></>;
+    }
+  } else {
+    router.push("/");
+    return <></>;
+  }
 
   return (
     <section>
