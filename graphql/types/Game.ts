@@ -60,8 +60,8 @@ export const GameQueryById = extendType({
           ...game,
           timeSlots: game.timeSlots.map((timeSlot) => ({
             ...timeSlot,
-            startTime: timeSlot.startTime.toString(),
-            endTime: timeSlot.endTime.toString(),
+            startTime: timeSlot.startTime.toString().substring(16, 21),
+            endTime: timeSlot.endTime.toString().substring(16, 21),
           })),
         };
         return gameWithStringDatetime;
