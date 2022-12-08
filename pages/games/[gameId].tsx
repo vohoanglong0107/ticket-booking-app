@@ -1,6 +1,7 @@
 import { useRouter } from "next/router";
 import TicketFormBooking from "@/components/TicketForm/TicketFormBooking";
 import { gql, useQuery } from "@apollo/client";
+import { itemData } from "@/utils/sample-data";
 
 const queryGameByGameId = gql`
   query Games($gameId: String) {
@@ -33,10 +34,11 @@ const GameInfo = () => {
   if (loading) return <p>loading</p>;
 
   if (error) return <p>error</p>;
+  const randomImage = itemData[Math.floor(Math.random() * itemData.length)].img;
 
   return (
     <TicketFormBooking
-      img={data.game.location}
+      img={randomImage}
       gameName={data.game.name}
       description={data.game.description}
       timeSlots={data.game.timeSlots}
