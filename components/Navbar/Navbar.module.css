@@ -3,6 +3,12 @@
   text-decoration: none;
   color: inherit;
 }
+.logo img {
+  width: 48px;
+  height: 48px;
+  border-radius: 24px 24px 24px 24px;
+  border-style: outset;
+}
 .header {
   position: sticky;
   z-index: 30;
@@ -10,10 +16,11 @@
 }
 .nav {
   display: flex;
-  padding: 16px;
+  padding: 5px;
   justify-content: space-between;
   align-items: center;
   background-color: #f1f1f1;
+  background-image: url('https://anhdep123.com/wp-content/uploads/2020/12/anh-sao-bang.jpg');
 }
 .nav__menu-list {
   display: flex;
@@ -26,7 +33,10 @@
   padding: 24px 16px;
   transition: all 0.2s;
   min-height: calc(100vh - 60px);
-  background-color: #f1f1f1;
+  background-color: #463672;
+  border-style: outset;
+  border: 2px solid rgb(18, 63, 109);
+  border-radius: 3px 24px 3px 24px;
 }
 .nav__menu-list.active {
   right: 0;
@@ -41,6 +51,27 @@
   font-weight: bold;
 }
 
+@keyframes filling {
+  from{
+    background-position: center 25%;
+  }
+  to {
+    background-position: center 50%;
+  }
+}
+
+.container_text {
+  text-align: center;
+  background-image:  url(https://static.pexels.com/photos/4827/nature-forest-trees-fog.jpeg);
+  -webkit-text-fill-color: transparent;
+  -webkit-background-clip: text;
+  color:  #FFFFFF;
+  padding-top: 20px;
+  font-size: 10px;
+  font-family: 'Bungee', cursive;
+  animation: filling 3s ease forwards;
+}
+
 @media screen and (min-width: 768px) {
   .nav__menu-list {
     position: unset;
@@ -48,7 +79,29 @@
     min-height: fit-content;
     width: fit-content;
     column-gap: 24px;
-    align-items: center;
+    border-style: outset;
+  }
+  .container_text {
+    padding-left: 10px;
+    padding-right: 10px;
+    text-align: left;
+    
+    /* text-align: l; */
+    background-image:  url(https://static.pexels.com/photos/4827/nature-forest-trees-fog.jpeg);
+    -webkit-text-fill-color: transparent;
+    -webkit-background-clip: text;
+    color:  #FFFFFF;
+    padding-bottom: 60px;
+    font-size: 40px;
+    font-family: 'Bungee', cursive;
+    animation: filling 3s ease forwards;
+  }
+  .logo img {
+    padding-left: 5px;
+    border-radius: 24px 24px 24px 24px;
+    width: 180px;
+    height: 130px;
+    border-style: outset;
   }
   .nav__link::before {
     content: "";
