@@ -10,4 +10,12 @@ export default {
 } as Meta;
 
 const Template = (args) => <TitlebarImageList {...args} />;
-export const Test = Template.bind({});
+export const Default = Template.bind({});
+Default.args = {
+  games: [
+    {
+      id: "10",
+      title: "abc",
+    },
+  ],
+};
