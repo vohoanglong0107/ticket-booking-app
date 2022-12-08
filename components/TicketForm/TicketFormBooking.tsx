@@ -1,95 +1,44 @@
 import { Game } from "@/graphql/types";
+import { useState } from "react";
 
-const timeSlots = [
-  {
-    id: 1,
-    timeSlot: "7:00-7:30",
-  },
-  {
-    id: 2,
-    timeSlot: "7:00-7:30",
-  },
-  {
-    id: 3,
-    timeSlot: "7:00-7:30",
-  },
-  {
-    id: 4,
-    timeSlot: "7:00-7:30",
-  },
-  {
-    id: 5,
-    timeSlot: "7:00-7:30",
-  },
-  {
-    id: 6,
-    timeSlot: "7:00-7:30",
-  },
-  {
-    id: 7,
-    timeSlot: "7:00-7:30",
-  },
-  {
-    id: 8,
-    timeSlot: "7:00-7:30",
-  },
-  {
-    id: 9,
-    timeSlot: "7:00-7:30",
-  },
-  {
-    id: 10,
-    timeSlot: "7:00-7:30",
-  },
-  {
-    id: 11,
-    timeSlot: "7:00-7:30",
-  },
-  {
-    id: 9,
-    timeSlot: "7:00-7:30",
-  },
-  {
-    id: 7,
-    timeSlot: "7:00-7:30",
-  },
-  {
-    id: 8,
-    timeSlot: "7:00-7:30",
-  },
-  {
-    id: 9,
-    timeSlot: "7:00-7:30",
-  },
-  {
-    id: 7,
-    timeSlot: "7:00-7:30",
-  },
-  {
-    id: 8,
-    timeSlot: "7:00-7:30",
-  },
-  {
-    id: 9,
-    timeSlot: "7:00-7:30",
-  },
-];
-export default function TicketFormBooking() {
+interface timeSlot {
+  id: string;
+  startTime: string;
+  endTime: string;
+}
+interface Props {
+  img: string;
+  gameName: string;
+  description: string;
+  timeSlots: Array<timeSlot>;
+}
+
+export default function TicketFormBooking({
+  img: imgProp,
+  gameName: gameNameProp,
+  description: descriptionProp,
+  timeSlots: timeSlotsProp,
+}: Props) {
+  const [img, setImg] = useState(imgProp);
+  const [gameName, setGameName] = useState(gameNameProp);
+  const [description, setDescription] = useState(descriptionProp);
+  const [timeSlots, setTimeSlots] = useState(timeSlotsProp);
+
   return (
     <section className="body-font overflow-hidden bg-white text-gray-700">
       <div className="container mx-auto px-5 py-24">
         <div className="mx-auto flex flex-wrap lg:w-4/5">
           <img
-            alt="ecommerce"
+            alt="img"
             className="w-full rounded border border-gray-200 object-cover object-center lg:w-1/2"
-            src="https://tourdulichuytin.com/images/tin-tuc/cam-nang-du-lich/da-nang/tro-choi-tai-asia-park.jpg"
+            src={img}
           />
           <div className="mt-6 w-full lg:mt-0 lg:w-1/2 lg:py-6 lg:pl-10">
             <h2 className="title-font text-sm tracking-widest text-gray-500">
               ASIA PARK - CÔNG VIÊN CHÂU Á
             </h2>
             <h1 className="title-font mb-1 text-3xl font-medium text-gray-900 ">
-              Tàu lượn siêu tốc
+              {gameName}
             </h1>
             <div className="mb-4 flex">
               <span className="flex items-center">
@@ -189,19 +138,18 @@ export default function TicketFormBooking() {
                 </a>
               </span>
             </div>
-            <p className="h-72 leading-relaxed">
-              Thiên đường vui chơi trong nhà với hơn 30 trò chơi điện tử, khu
-              bắn súng Grunge Station, khu trò chơi vận động Carnival Game.
-            </p>
+            <p className="h-72 leading-relaxed">{description}</p>
             <div className="mt-6 mb-5 flex items-center border-b-2 border-gray-200 pb-5"></div>
             <div className="grid grid-cols-4 gap-4">
-              {timeSlots.map((timeSlot) => {
+              {timeSlots?.map((timeSlot) => {
                 return (
                   <button
-                    className="ml-auto flex rounded border-0 bg-red-500 py-4 px-6 text-base text-white hover:bg-red-600 focus:outline-none"
+                    className="ml-auto flex rounded border-0 bg-red-500 py-4 px-2 text-base text-white hover:bg-red-600 focus:outline-none"
                     key={timeSlot.id}
                   >
-                    {timeSlot.timeSlot}
+                    <h4>
+                      {timeSlot.startTime}- {timeSlot.endTime}
+                    </h4>
                   </button>
                 );
               })}
