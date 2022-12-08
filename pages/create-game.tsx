@@ -1,9 +1,12 @@
 import Link from "next/link";
-import Layout from "../components/Layout";
+import { NextPageWithLayout } from "./_app";
 import GameRegisterForm from "@/components/GameRegister";
-import { gql, useMutation } from "@apollo/client";
-import { useState } from "react";
+import { gql, useMutation, useQuery } from "@apollo/client";
+import { useState, useEffect } from "react";
 import { useRouter } from "next/router";
+import { authOptions } from "./api/auth/[...nextauth]";
+import { unstable_getServerSession } from "next-auth";
+import { InferGetServerSidePropsType } from "next";
 
 const createGameMutation = gql`
   mutation Mutation(
@@ -29,10 +32,51 @@ const createGameMutation = gql`
   }
 `;
 
-const CreateGamePage = () => {
+const queryUserByEmail = gql`
+  query Query($email: String) {
+    user(email: $email) {
+      id
+      firstName
+      lastName
+      email
+      avatarURL
+      role
+      address
+    }
+  }
+`;
+
+export const getServerSideProps = async ({ req, res }) => {
+  const session = await unstable_getServerSession(req, res, authOptions);
+  if (!session) {
+    return {
+      redirect: {
+        destination: "/signin",
+      },
+      props: {},
+    };
+  }
+  return {
+    props: {
+      email: session.user.email,
+    },
+  };
+};
+
+const CreateGamePage: NextPageWithLayout<
+  InferGetServerSidePropsType<typeof getServerSideProps>
+> = ({ email }) => {
   const router = useRouter();
-  const [createGame, { data, loading, error }] =
-    useMutation(createGameMutation);
+  const { data, error, loading } = useQuery(queryUserByEmail, {
+    variables: { email },
+  });
+  useEffect(() => {
+    const checkRole = () => {
+      if (data && data.user.role != "STORE_OWNER") router.push("/");
+    };
+    checkRole();
+  }, [data, router]);
+  const [createGame] = useMutation(createGameMutation);
 
   const [createGameErrors, setCreateGameErrors] = useState<null | string[]>(
     null
@@ -66,6 +110,10 @@ const CreateGamePage = () => {
       console.log(error.graphQLErrors);
     }
   };
+
+  if (loading) return <p>loading</p>;
+
+  if (error) return <p>error</p>;
 
   return (
     <section>
