@@ -1,16 +1,7 @@
-import { NextPageWithLayout } from "./_app";
-import TicketFormBooking from "../components/TicketForm/TicketFormBooking";
-import { gql, useMutation, useQuery } from "@apollo/client";
-const queryTimeSlotByGameId = gql`
-  query TimeSlotByGameId($gameId: String) {
-    timeSlotByGameId(game_id: $gameId) {
-      id
-      startTime
-      endTime
-      game_id
-    }
-  }
-`;
+import { useRouter } from "next/router";
+import TicketFormBooking from "@/components/TicketForm/TicketFormBooking";
+import { gql, useQuery } from "@apollo/client";
+import { itemData } from "@/utils/sample-data";
 
 const queryGameByGameId = gql`
   query Games($gameId: String) {
@@ -31,22 +22,23 @@ const queryGameByGameId = gql`
   }
 `;
 
-const TimeSlot = () => {
-  const id = "1";
+const GameInfo = () => {
+  const router = useRouter();
+  const { gameId } = router.query;
   const { data, error, loading } = useQuery(queryGameByGameId, {
     variables: {
-      gameId: id,
+      gameId,
     },
   });
 
   if (loading) return <p>loading</p>;
 
   if (error) return <p>error</p>;
-  console.log("dsadsad" + JSON.stringify(data));
+  const randomImage = itemData[Math.floor(Math.random() * itemData.length)].img;
 
   return (
     <TicketFormBooking
-      img={data.game.location}
+      img={randomImage}
       gameName={data.game.name}
       description={data.game.description}
       timeSlots={data.game.timeSlots}
@@ -54,4 +46,4 @@ const TimeSlot = () => {
   );
 };
 
-export default TimeSlot;
+export default GameInfo;
