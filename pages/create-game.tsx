@@ -1,8 +1,7 @@
 import Link from "next/link";
-import Layout from "../components/Layout";
 import GameRegisterForm from "@/components/GameRegister";
 import { gql, useMutation } from "@apollo/client";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { useRouter } from "next/router";
 
 const createGameMutation = gql`
@@ -20,6 +19,7 @@ const createGameMutation = gql`
       price: $price
       remaining_slot: $remaining_slot
     ) {
+      id
       description
       location
       name
@@ -57,8 +57,6 @@ const CreateGamePage = () => {
         },
       });
       setCreateGameErrors(null);
-      alert("Create game successfully");
-      router.reload();
     } catch (error) {
       setCreateGameErrors([error.message]);
       console.log(error);
@@ -66,6 +64,10 @@ const CreateGamePage = () => {
       console.log(error.graphQLErrors);
     }
   };
+
+  useEffect(() => {
+    if (data) router.push(`/games/${data.game.id}`);
+  }, [data, loading, error, router]);
 
   return (
     <section>
