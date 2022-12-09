@@ -83,6 +83,12 @@ export const GameCreate = extendType({
         remaining_slot: intArg(),
       },
       async resolve(_, args, context) {
+        if (
+          !context.user ||
+          !context.user.role ||
+          context.user.role != "STORE_OWNER"
+        )
+          return null;
         return context.prisma.game.create({
           data: {
             name: args.name,
