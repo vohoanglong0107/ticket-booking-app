@@ -77,7 +77,8 @@ const CreateGamePage: NextPageWithLayout<
   InferGetServerSidePropsType<typeof getServerSideProps>
 > = () => {
   const router = useRouter();
-  const [createGame] = useMutation(createGameMutation);
+  const [createGame, { data, loading, error }] =
+    useMutation(createGameMutation);
 
   const [createGameErrors, setCreateGameErrors] = useState<null | string[]>(
     null
