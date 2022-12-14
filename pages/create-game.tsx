@@ -1,12 +1,14 @@
 import Link from "next/link";
 import { NextPageWithLayout } from "./_app";
 import GameRegisterForm from "@/components/GameRegister";
-import { gql, useMutation, useQuery } from "@apollo/client";
-import { useState, useEffect } from "react";
+import { gql, useMutation } from "@apollo/client";
+import { useState } from "react";
 import { useRouter } from "next/router";
 import { authOptions } from "./api/auth/[...nextauth]";
 import { unstable_getServerSession } from "next-auth";
 import { InferGetServerSidePropsType } from "next";
+import apolloClient from "@/lib/apollo";
+import { Role } from "@prisma/client";
 
 const createGameMutation = gql`
   mutation Mutation(
@@ -35,13 +37,7 @@ const createGameMutation = gql`
 const queryUserByEmail = gql`
   query Query($email: String) {
     user(email: $email) {
-      id
-      firstName
-      lastName
-      email
-      avatarURL
       role
-      address
     }
   }
 `;
@@ -56,26 +52,30 @@ export const getServerSideProps = async ({ req, res }) => {
       props: {},
     };
   }
+
+  const { data } = await apolloClient.query({
+    query: queryUserByEmail,
+    variables: { email: session.user.email },
+  });
+  const { user } = data;
+
+  if (user.role !== Role.STORE_OWNER)
+    return {
+      redirect: {
+        destination: "/",
+      },
+      props: {},
+    };
+
   return {
-    props: {
-      email: session.user.email,
-    },
+    props: {},
   };
 };
 
 const CreateGamePage: NextPageWithLayout<
   InferGetServerSidePropsType<typeof getServerSideProps>
-> = ({ email }) => {
+> = () => {
   const router = useRouter();
-  const { data, error, loading } = useQuery(queryUserByEmail, {
-    variables: { email },
-  });
-  // useEffect(() => {
-  //   const checkRole = () => {
-  //     if (data && data.user && "role" in data.user && data.user.role != "STORE_OWNER") router.push("/");
-  //   };
-  //   checkRole();
-  // }, [data, router]);
   const [createGame] = useMutation(createGameMutation);
 
   const [createGameErrors, setCreateGameErrors] = useState<null | string[]>(
@@ -110,24 +110,6 @@ const CreateGamePage: NextPageWithLayout<
       console.log(error.graphQLErrors);
     }
   };
-
-  // const checkRole = () => {
-  // };
-
-  if (loading) return <p>loading</p>;
-
-  if (error) return <p>error</p>;
-
-  // checkRole();
-  if (data && data.user && "role" in data.user) {
-    if (data.user.role != "STORE_OWNER") {
-      router.push("/");
-      return <></>;
-    }
-  } else {
-    router.push("/");
-    return <></>;
-  }
 
   return (
     <section>
