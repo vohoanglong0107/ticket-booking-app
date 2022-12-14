@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-// import Image from "next/image";
+import Image from "next/image";
 
 // import '../../styles/globals.css'
 export interface CreateGameFormProps {

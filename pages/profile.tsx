@@ -1,10 +1,11 @@
 import { NextPageWithLayout } from "./_app";
 import UserProfileForm from "../components/UserProfile/UserProfileForm";
-import { gql, useMutation, useQuery } from "@apollo/client";
+import { gql, useMutation } from "@apollo/client";
 import { Role } from "@prisma/client";
-import { Session, unstable_getServerSession } from "next-auth";
+import { unstable_getServerSession } from "next-auth";
 import { authOptions } from "./api/auth/[...nextauth]";
-import { GetServerSideProps, InferGetServerSidePropsType } from "next";
+import { InferGetServerSidePropsType } from "next";
+import { initializeApolloClient } from "@/lib/apollo";
 
 const editUserProfile = gql`
   mutation Mutation(
@@ -55,19 +56,22 @@ export const getServerSideProps = async ({ req, res }) => {
       props: {},
     };
   }
+  const apolloClient = initializeApolloClient();
+  const { data } = await apolloClient.query({
+    query: queryUserByEmail,
+    variables: { email: session.user.email },
+  });
+  const { user } = data;
   return {
     props: {
-      email: session.user.email,
+      user,
     },
   };
 };
 
 const Profile: NextPageWithLayout<
   InferGetServerSidePropsType<typeof getServerSideProps>
-> = ({ email }) => {
-  const { data, error, loading } = useQuery(queryUserByEmail, {
-    variables: { email },
-  });
+> = ({ user }) => {
   const [editUser] = useMutation(editUserProfile);
   const submit = (
     firstName: string,
@@ -86,17 +90,12 @@ const Profile: NextPageWithLayout<
       },
     });
   };
-
-  if (loading) return <p>loading</p>;
-
-  if (error) return <p>error</p>;
-
   return (
     <UserProfileForm
-      email={data.user.email}
-      firstName={data.user.firstName}
-      lastName={data.user.lastName}
-      address={data.user.address}
+      email={user.email}
+      firstName={user.firstName}
+      lastName={user.lastName}
+      address={user.address}
       onClick={submit}
     ></UserProfileForm>
   );
