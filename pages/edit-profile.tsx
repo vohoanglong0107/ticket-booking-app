@@ -1,11 +1,37 @@
 import { NextPageWithLayout } from "./_app";
-import UserProfileView from "../components/UserProfile/UserProfileView";
-import { gql } from "@apollo/client";
+import UserProfileForm from "../components/UserProfile/UserProfileForm";
+import { gql, useMutation } from "@apollo/client";
+import { Role } from "@prisma/client";
 import { unstable_getServerSession } from "next-auth";
 import { authOptions } from "./api/auth/[...nextauth]";
 import { InferGetServerSidePropsType } from "next";
 import { initializeApolloClient } from "@/lib/apollo";
 import { useRouter } from "next/router";
+
+const editUserProfile = gql`
+  mutation Mutation(
+    $userId: String
+    $firstName: String
+    $lastName: String
+    $address: String
+    $avatarUrl: String
+    $email: String
+    $role: Role
+  ) {
+    user(
+      id: $userId
+      firstName: $firstName
+      lastName: $lastName
+      address: $address
+      avatarURL: $avatarUrl
+      email: $email
+      role: $role
+    ) {
+      id
+      email
+    }
+  }
+`;
 
 const queryUserByEmail = gql`
   query Query($email: String) {
@@ -48,17 +74,32 @@ const Profile: NextPageWithLayout<
   InferGetServerSidePropsType<typeof getServerSideProps>
 > = ({ user }) => {
   const router = useRouter();
-  const onEdit = () => {
-    router.push("/edit-profile");
+  const [editUser] = useMutation(editUserProfile);
+  const submit = (
+    firstName: string,
+    lastName: string,
+    address: string,
+    email: string
+  ) => {
+    editUser({
+      variables: {
+        firstName,
+        lastName,
+        address,
+        email,
+        role: user.role,
+        avatarUrl: null,
+      },
+    }).then(() => router.push("/profile"));
   };
   return (
-    <UserProfileView
+    <UserProfileForm
       email={user.email}
       firstName={user.firstName}
       lastName={user.lastName}
       address={user.address}
-      onEdit={onEdit}
-    ></UserProfileView>
+      onClick={submit}
+    ></UserProfileForm>
   );
 };
 

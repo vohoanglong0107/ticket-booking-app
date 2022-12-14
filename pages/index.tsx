@@ -20,7 +20,6 @@ export const getServerSideProps = async () => {
     query: queryGames,
   });
   const { games } = data;
-  console.log(games);
 
   return {
     props: { games },
