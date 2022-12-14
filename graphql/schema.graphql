@@ -4,8 +4,9 @@
 
 type Booking {
   game: Game
+  id: String
   number_of_participants: Int
-  payment_status: Boolean
+  timeSlot: TimeSlot
   user: User
 }
 
@@ -20,11 +21,13 @@ type Game {
 }
 
 type Mutation {
-  booking(game_id: String, number_of_participants: Int, payment_status: Boolean, user_id: String): Booking
+  booking(game_id: String, number_of_participants: Int, time_slot_id: String, user_id: String): Booking
   createTimeSlot(endTime: String, game_id: String, startTime: String): TimeSlot
+  createTimeSlots(timeSlots: [TimeSlotInputType]): [TimeSlot]
   createUser(address: String, avatarURL: String, email: String, firstName: String, lastName: String, role: Role): User
   game(description: String, location: String, name: String, price: Float, remaining_slot: Int): Game
-  updateGame(description: String, id: String, location: String, name: String, price: Float, remaining_slot: Int): Game
+  updateGame(description: String, id: String, location: String, name: String, price: Float, remaining_slot: Int, timeSlots: [TimeSlotUpsertType]): Game
+  upsertTimeSlots(timeSlots: [TimeSlotUpsertType]): [TimeSlot]
   user(address: String, avatarURL: String, email: String, firstName: String, id: String, lastName: String, role: Role): User
 }
 
@@ -50,6 +53,19 @@ type TimeSlot {
   game_id: String
   id: String
   startTime: String
+}
+
+input TimeSlotInputType {
+  endTime: String!
+  game_id: String!
+  startTime: String!
+}
+
+input TimeSlotUpsertType {
+  endTime: String!
+  game_id: String!
+  id: String
+  startTime: String!
 }
 
 type User {

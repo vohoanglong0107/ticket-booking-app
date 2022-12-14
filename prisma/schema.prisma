@@ -35,13 +35,14 @@ model Game {
 }
 
 model Booking {
-  id                     String  @id @default(uuid())
+  id                     String   @id @default(uuid())
   number_of_participants Int
-  payment_status         Boolean
-  user_id                String?
-  game_id                String?
-  game                   Game?   @relation(fields: [game_id], references: [id])
-  user                   User?   @relation(fields: [user_id], references: [id])
+  user_id                String
+  game_id                String
+  time_slot_id           String
+  timeSlot               TimeSlot @relation(fields: [time_slot_id], references: [id])
+  game                   Game     @relation(fields: [game_id], references: [id])
+  user                   User     @relation(fields: [user_id], references: [id])
 }
 
 model Voucher {
@@ -54,11 +55,12 @@ model Voucher {
 }
 
 model TimeSlot {
-  id        String   @id @default(uuid())
-  startTime DateTime @default(now())
-  endTime   DateTime @default(now())
+  id        String    @id @default(uuid())
+  startTime DateTime  @default(now())
+  endTime   DateTime  @default(now())
   game_id   String
-  game      Game     @relation(fields: [game_id], references: [id])
+  game      Game      @relation(fields: [game_id], references: [id])
+  Booking   Booking[]
 }
 
 enum Role {
