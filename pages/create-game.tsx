@@ -2,7 +2,7 @@ import Link from "next/link";
 import { NextPageWithLayout } from "./_app";
 import GameRegisterForm from "@/components/GameRegister";
 import { gql, useMutation } from "@apollo/client";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { useRouter } from "next/router";
 import { authOptions } from "./api/auth/[...nextauth]";
 import { unstable_getServerSession } from "next-auth";
@@ -25,6 +25,7 @@ const createGameMutation = gql`
       price: $price
       remaining_slot: $remaining_slot
     ) {
+      id
       description
       location
       name
@@ -101,8 +102,6 @@ const CreateGamePage: NextPageWithLayout<
         },
       });
       setCreateGameErrors(null);
-      alert("Create game successfully");
-      router.reload();
     } catch (error) {
       setCreateGameErrors([error.message]);
       console.log(error);
@@ -110,6 +109,10 @@ const CreateGamePage: NextPageWithLayout<
       console.log(error.graphQLErrors);
     }
   };
+
+  useEffect(() => {
+    if (data) router.push(`/games/${data.game.id}`);
+  }, [data, loading, error, router]);
 
   return (
     <section>
