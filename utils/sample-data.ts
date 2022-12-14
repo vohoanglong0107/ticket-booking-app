@@ -1,28 +1,40 @@
+import trochoi1 from "@/assets/images/trochoi1.jpg";
+import trochoi2 from "@/assets/images/trochoi2.jpg";
+import trochoi3 from "@/assets/images/trochoi3.jpg";
+import trochoi4 from "@/assets/images/trochoi4.jpg";
+import trochoi5 from "@/assets/images/trochoi5.jpg";
+import trochoi6 from "@/assets/images/trochoi6.jpg";
+import trochoi7 from "@/assets/images/trochoi7.jpg";
+import trochoi8 from "@/assets/images/trochoi8.jpg";
+import trochoi9 from "@/assets/images/trochoi9.jpg";
+import trochoi10 from "@/assets/images/trochoi10.jpg";
+import trochoi11 from "@/assets/images/trochoi11.jpg";
+
 export const itemData = [
   {
-    img: "https://image.thanhnien.vn/1200x630/Uploaded/2022/vocgmvbc/2022_04_20/asia-park-5270.jpg",
+    img: trochoi1,
     title: "Journey to the West",
     // author: '@rollelflex_graphy726',
   },
   {
-    img: "https://znews-photo.zingcdn.me/w660/Uploaded/wyhktpu/2020_07_06/Cong_vien_Chau_A_14_.jpg",
+    img: trochoi2,
     title: "The Flying Kirins",
     // author: '@helloimnik',
   },
   {
-    img: "https://media.thuonghieucongluan.vn/uploads/2021/03/04/1-1614810704.jpg",
+    img: trochoi3,
     title: "Paradise Fall ",
     // author: '@nolanissac',
     // cols: 2,
   },
   {
-    img: "https://www.tuannguyentravel.com/data/images/tro_choi_sky_treasure%281%29.jpg",
+    img: trochoi4,
     title: "Golden Sky Tower",
     // author: '@hjrc33',
     // cols: 2,
   },
   {
-    img: "https://media.baoquangninh.com.vn/dataimages/201701/original/images906734_FestivalCarousel__13_.jpg",
+    img: trochoi5,
     title: "Queen Cobra",
     // author: '@arwinneil',
     // rows: 2,
@@ -30,34 +42,34 @@ export const itemData = [
     // featured: true,
   },
   {
-    img: "https://danangopentour.vn/uploads/10-2019/cac-tro-choi-cam-giac-manh-cong-vien-chau-a.jpg",
+    img: trochoi6,
     title: "Singapore Sling",
     // author: '@tjdragotta',
   },
   {
-    img: "https://congthuong.vn/stores/news_dataimages/minhnguyet/042016/23/14/b34f77597063aca592b555d129f2da03_vong-6.jpg",
+    img: trochoi7,
     title: "Festival Carousel ",
     // author: '@katie_wasserman',
   },
   {
-    img: "http://vyctravel.com/libs/upload/ckfinder/images/Da%20Nang/c%C3%B4ng%20vi%C3%AAn%20Asian%20Park.jpg",
+    img: trochoi8,
     title: "Happy Choo Choo",
     // author: '@silverdalex',
     // rows: 2,
     // cols: 2,
   },
   {
-    img: "http://image.congan.com.vn/thumbnail/CATP-1382-2017-4-5/anh-1_1.jpg",
+    img: trochoi9,
     title: "Dino Island",
     // author: '@shelleypauls',
   },
   {
-    img: "https://danangtransfer.vn/wp-content/uploads/2021/04/ve-Cong-vien-chau-a-asiapark-5-1024x529.jpg",
+    img: trochoi10,
     title: " Sun Wheel ",
     // author: '@peterlaster',
   },
   {
-    img: "https://asiapark.sunworld.vn/wp-content/uploads/2018/09/tro-choi-mao-hiem-sieu-chat-sap-co-mat-o-hoi-an-1.jpg",
+    img: trochoi11,
     title: "Singapore Sling",
     // author: '@southside_customs',
     // cols: 2,

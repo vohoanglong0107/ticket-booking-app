@@ -1,7 +1,10 @@
 import TitlebarImageList from "@/components/View/View-source";
-import { gql, useQuery } from "@apollo/client";
+import { gql } from "@apollo/client";
+import { initializeApolloClient } from "@/lib/apollo";
+import { NextPageWithLayout } from "./_app";
+import { InferGetServerSidePropsType } from "next";
 
-const queryGames = gql`
+export const queryGames = gql`
   query Games {
     games {
       id
@@ -10,18 +13,23 @@ const queryGames = gql`
   }
 `;
 
-export default function Home() {
-  const { data, error, loading } = useQuery(queryGames);
-  if (loading) return <p>loading</p>;
+export const getServerSideProps = async () => {
+  const apolloClient = initializeApolloClient();
 
-  if (error) {
-    console.log(error);
-    return <p>error</p>;
-  }
+  const { data } = await apolloClient.query({
+    query: queryGames,
+  });
+  const { games } = data;
+  console.log(games);
 
-  return (
-    <div>
-      <TitlebarImageList games={data.games} />
-    </div>
-  );
-}
+  return {
+    props: { games },
+  };
+};
+
+const Home: NextPageWithLayout<
+  InferGetServerSidePropsType<typeof getServerSideProps>
+> = ({ games }) => {
+  return <TitlebarImageList games={games} />;
+};
+export default Home;

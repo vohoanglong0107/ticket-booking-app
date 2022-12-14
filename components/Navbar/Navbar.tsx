@@ -5,12 +5,14 @@ import styles from "./Navbar.module.css";
 import classNames from "classnames";
 import { Session } from "next-auth";
 import { signOut } from "next-auth/react";
+import Image from "next/image";
+import MULogo from "@/assets/images/MU_Logo.webp";
 
 const MENU_LIST = [
-  { text: "Lịch trò chơi", href: "/" },
-  { text: "Khuyến mãi", href: "" },
-  { text: "Giới thiệu", href: "" },
-  { text: "Về chúng tôi", href: "" },
+  { text: "Games", href: "/" },
+  { text: "Vouchers", href: "/voucher" },
+  { text: "Register Game", href: "/create-game" },
+  { text: "Profile", href: "/profile" },
 ];
 
 interface NavbarProps {
@@ -24,16 +26,12 @@ const Navbar = ({ user }: NavbarProps) => {
   return (
     <header className={styles.header}>
       <nav className={styles.nav}>
-        <Link legacyBehavior href={"/"}>
-          <a className={styles["disabled-anchor"]}>
-            <a>
-              <h1 className={styles.logo}>
-                <img src="https://lzd-img-global.slatic.net/g/p/912a995390dff7f26a1bc98ef76ba7bc.jpg_720x720q80.jpg_.webp" />
-              </h1>
-            </a>
-          </a>
-        </Link>
-        <div>
+        <div className="flex flex-row pl-2.5">
+          <Link href={"/"}>
+            <div className="mr-0.5 overflow-hidden rounded-xl">
+              <Image src={MULogo} width="64" height="64" />
+            </div>
+          </Link>
           <h1 className={styles.container_text}>SOCIAL BOTTOM</h1>
         </div>
         <div

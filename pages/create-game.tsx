@@ -7,7 +7,7 @@ import { useRouter } from "next/router";
 import { authOptions } from "./api/auth/[...nextauth]";
 import { unstable_getServerSession } from "next-auth";
 import { InferGetServerSidePropsType } from "next";
-import apolloClient from "@/lib/apollo";
+import { initializeApolloClient } from "@/lib/apollo";
 import { Role } from "@prisma/client";
 
 const createGameMutation = gql`
@@ -54,6 +54,7 @@ export const getServerSideProps = async ({ req, res }) => {
     };
   }
 
+  const apolloClient = initializeApolloClient();
   const { data } = await apolloClient.query({
     query: queryUserByEmail,
     variables: { email: session.user.email },

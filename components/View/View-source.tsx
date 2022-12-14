@@ -5,6 +5,7 @@ import ImageListItemBar from "@mui/material/ImageListItemBar";
 import styles from "./View-source.module.css";
 import { itemData } from "@/utils/sample-data";
 import Link from "next/link";
+import Image from "next/image";
 
 interface Game {
   id: string;
@@ -16,19 +17,24 @@ interface Props {
 
 export default function TitlebarImageList({ games }: Props) {
   return (
-    <div className={styles.div}>
-      <ImageList cols={3}>
+    <div className={`${styles.div} px-5`}>
+      <ImageList cols={3} rowHeight={200} gap={25}>
         {games.map((game, index) => (
-          <ImageListItem key={index} style={{ padding: "30px" }}>
+          <ImageListItem key={index}>
             <Link href={`/games/${game.id}`}>
               <a>
-                <img
+                <Image
                   src={itemData[index % itemData.length].img}
-                  style={{ borderRadius: "44px 44px 44px 44px" }}
+                  style={{ borderRadius: "33px" }}
+                  layout="fill"
+                  objectFit="cover"
                 />
                 <ImageListItemBar
-                  style={{ textAlign: "center", padding: "20px" }}
                   title={game.title}
+                  sx={{
+                    textAlign: "center",
+                    borderRadius: "0px 0px 33px 33px",
+                  }}
                 />
               </a>
             </Link>

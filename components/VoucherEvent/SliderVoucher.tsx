@@ -1,6 +1,7 @@
 import VoucherItem from "./VoucherItem";
 import { FiChevronRight, FiChevronLeft } from "react-icons/fi";
 import { useState } from "react";
+import Image from "next/image";
 function SliderVoucher() {
   const myData = VoucherItem;
   const [activeSlide, setActiveSlide] = useState(1);
@@ -46,8 +47,10 @@ function SliderVoucher() {
             >
               <FiChevronLeft />
             </button>
-            <div className=" flex h-72 flex-col  items-center">
-              <img src={image} className="h-64 object-cover w-full rounded-lg" />
+            <div className="flex h-72 w-full flex-col items-center">
+              <div className="relative h-64 w-2/3 rounded-lg object-cover">
+                <Image src={image} layout="fill" objectFit="contain" />
+              </div>
             </div>
             <button
               className="rounded-lg border-2 border-green-400 text-4xl text-green-400"
@@ -55,7 +58,6 @@ function SliderVoucher() {
             >
               <FiChevronRight />
             </button>
-            
           </div>
         );
       })}

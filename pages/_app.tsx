@@ -3,7 +3,7 @@ import { AppProps } from "next/app";
 import { NextPage } from "next";
 import { ApolloProvider } from "@apollo/client";
 import Layout from "@/components/Layout";
-import apolloClient from "../lib/apollo";
+import { initializeApolloClient } from "../lib/apollo";
 import "@/styles/globals.css";
 import { SessionProvider } from "next-auth/react";
 import { Session } from "next-auth";
@@ -24,6 +24,7 @@ export default function App({
   Component,
   pageProps: { session, ...pageProps },
 }: AppPropsWithLayout) {
+  const apolloClient = initializeApolloClient();
   const getLayout = Component.getLayout || ((page) => <Layout>{page}</Layout>);
   return (
     <SessionProvider session={session}>

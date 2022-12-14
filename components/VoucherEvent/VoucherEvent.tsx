@@ -17,7 +17,7 @@ export default function VoucherEvent() {
               onClick={() => setIndex(0)}
               className=" inline-block rounded-t-lg border-b-2 border-transparent p-1 font-mono  text-xl font-semibold text-green-400 hover:border-green-400 hover:text-green-400 dark:hover:text-green-400"
             >
-              Khuyến Mãi
+              Vouchers
             </button>
           </li>
           <li className="my-3 ml-4" role="presentation">
@@ -25,7 +25,7 @@ export default function VoucherEvent() {
               className=" js-button-event   inline-block rounded-t-lg border-b-2 border-transparent p-1 font-mono  text-xl font-semibold text-green-400 hover:border-green-400 hover:text-green-400 dark:hover:text-green-400"
               onClick={() => setIndex(1)}
             >
-              Sự Kiện
+              Events
             </button>
           </li>
         </ul>
