@@ -1,8 +1,14 @@
 import Link from "next/link";
+import { NextPageWithLayout } from "./_app";
 import GameRegisterForm from "@/components/GameRegister";
 import { gql, useMutation } from "@apollo/client";
 import { useEffect, useState } from "react";
 import { useRouter } from "next/router";
+import { authOptions } from "./api/auth/[...nextauth]";
+import { unstable_getServerSession } from "next-auth";
+import { InferGetServerSidePropsType } from "next";
+import apolloClient from "@/lib/apollo";
+import { Role } from "@prisma/client";
 
 const createGameMutation = gql`
   mutation Mutation(
@@ -29,7 +35,47 @@ const createGameMutation = gql`
   }
 `;
 
-const CreateGamePage = () => {
+const queryUserByEmail = gql`
+  query Query($email: String) {
+    user(email: $email) {
+      role
+    }
+  }
+`;
+
+export const getServerSideProps = async ({ req, res }) => {
+  const session = await unstable_getServerSession(req, res, authOptions);
+  if (!session) {
+    return {
+      redirect: {
+        destination: "/signin",
+      },
+      props: {},
+    };
+  }
+
+  const { data } = await apolloClient.query({
+    query: queryUserByEmail,
+    variables: { email: session.user.email },
+  });
+  const { user } = data;
+
+  if (user.role !== Role.STORE_OWNER)
+    return {
+      redirect: {
+        destination: "/",
+      },
+      props: {},
+    };
+
+  return {
+    props: {},
+  };
+};
+
+const CreateGamePage: NextPageWithLayout<
+  InferGetServerSidePropsType<typeof getServerSideProps>
+> = () => {
   const router = useRouter();
   const [createGame, { data, loading, error }] =
     useMutation(createGameMutation);
