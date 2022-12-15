@@ -13,7 +13,7 @@ export default function UserProfileView({
   onEdit,
 }: Props) {
   return (
-    <section className="gradient-form h-full bg-gray-200">
+    <section className="gradient-form flex h-full justify-center bg-gray-200">
       <div className="container h-full py-12 px-6">
         <div className="g-6 flex h-full flex-wrap items-center justify-center text-gray-800">
           <div className="xl:w-8/12">

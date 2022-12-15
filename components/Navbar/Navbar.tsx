@@ -13,6 +13,7 @@ const MENU_LIST = [
   { text: "Vouchers", href: "/voucher" },
   { text: "Register Game", href: "/create-game" },
   { text: "Profile", href: "/profile" },
+  { text: "Bookings", href: "/bookings" },
 ];
 
 interface NavbarProps {

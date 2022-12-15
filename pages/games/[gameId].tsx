@@ -6,6 +6,7 @@ import { authOptions } from "@/pages/api/auth/[...nextauth]";
 import { NextPageWithLayout } from "@/pages/_app";
 import { unstable_getServerSession } from "next-auth";
 import { initializeApolloClient } from "@/lib/apollo";
+import { useRouter } from "next/router";
 
 const queryGameAndUser = gql`
   query Query($gameId: String, $email: String) {
@@ -83,6 +84,7 @@ const GameInfo: NextPageWithLayout<
   InferGetServerSidePropsType<typeof getServerSideProps>
 > = ({ game, user }) => {
   const [booking] = useMutation(bookingMutation);
+  const router = useRouter();
   const randomImage = itemData[Math.floor(Math.random() * itemData.length)].img;
   const onBooking = (timeSlotId: string, numberOfParticipants: number) => {
     booking({
@@ -92,7 +94,7 @@ const GameInfo: NextPageWithLayout<
         userId: user.id,
         bookingGameId: game.id,
       },
-    });
+    }).then(() => router.push("/bookings"));
   };
 
   return (

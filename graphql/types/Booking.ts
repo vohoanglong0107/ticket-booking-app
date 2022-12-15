@@ -40,17 +40,29 @@ export const BookingQuery = extendType({
   definition(t) {
     t.nonNull.list.field("bookings", {
       type: Booking,
-      async resolve(_parent, _args, context) {
-        return context.prisma.booking.findMany({
+      args: {
+        userId: stringArg(),
+      },
+      async resolve(_parent, args, context) {
+        const bookings = await context.prisma.booking.findMany({
           include: {
             user: true,
-            game: {
-              include: {
-                timeSlots: true,
-              },
-            },
+            game: true,
+            timeSlot: true,
+          },
+          where: {
+            user_id: args.userId,
           },
         });
+
+        return bookings.map((booking) => ({
+          ...booking,
+          timeSlot: {
+            ...booking.timeSlot,
+            startTime: booking.timeSlot.startTime.toISOString(),
+            endTime: booking.timeSlot.endTime.toISOString(),
+          },
+        }));
       },
     });
   },

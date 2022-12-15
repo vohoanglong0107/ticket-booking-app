@@ -32,7 +32,7 @@ type Mutation {
 }
 
 type Query {
-  bookings: [Booking]!
+  bookings(userId: String): [Booking]!
   game(game_id: String): Game
   games: [Game]!
   timeSlotByGameId(game_id: String): [TimeSlot]!
