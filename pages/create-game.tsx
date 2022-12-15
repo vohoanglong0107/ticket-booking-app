@@ -113,7 +113,7 @@ const CreateGamePage: NextPageWithLayout<
   };
 
   useEffect(() => {
-    if (data) router.push(`/games/${data.game.id}`);
+    if (data?.game) router.push(`/games/${data.game.id}`);
   }, [data, loading, error, router]);
 
   return (

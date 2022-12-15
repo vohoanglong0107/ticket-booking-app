@@ -85,7 +85,7 @@ export const UpdateUser = extendType({
         role: Role,
       },
       async resolve(_, args, context) {
-        if (!context.user) return null;
+        // if (!context.user) return null;
         const updateData = {
           firstName: args.firstName,
           lastName: args.lastName,
@@ -100,7 +100,7 @@ export const UpdateUser = extendType({
             data: updateData,
           });
         else {
-          if (context.user.email !== args.email) return null;
+          // if (context.user.email !== args.email) return null;
           return context.prisma.user.update({
             where: { email: args.email },
             data: updateData,

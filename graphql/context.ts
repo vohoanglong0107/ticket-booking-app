@@ -9,11 +9,16 @@ export type Context = {
   user?: Session["user"];
 };
 export async function createContext({ req, res }): Promise<Context> {
-  const session = await unstable_getServerSession(req, res, authOptions);
-  if (session)
-    return {
-      prisma,
-      user: session.user,
-    };
+  // May be because issue with NEXTAUTH_URL having multiple domain,
+  // next-auth can only recognize when access from deployment url,
+  // not production url
+  // but weird, next auth can recognize it client side
+  // const session = await unstable_getServerSession(req, res, authOptions);
+  // console.log(session);
+  // if (session)
+  //   return {
+  //     prisma,
+  //     user: session.user,
+  //   };
   return { prisma };
 }

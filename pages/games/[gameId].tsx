@@ -7,6 +7,7 @@ import { NextPageWithLayout } from "@/pages/_app";
 import { unstable_getServerSession } from "next-auth";
 import { initializeApolloClient } from "@/lib/apollo";
 import { useRouter } from "next/router";
+import { Role } from "@prisma/client";
 
 const queryGameAndUser = gql`
   query Query($gameId: String, $email: String) {
@@ -98,14 +99,26 @@ const GameInfo: NextPageWithLayout<
   };
 
   return (
-    <GameInfoViewer
-      img={randomImage}
-      gameName={game.name}
-      description={game.description}
-      timeSlots={game.timeSlots}
-      price={game.price}
-      onBooking={onBooking}
-    ></GameInfoViewer>
+    <div>
+      <GameInfoViewer
+        img={randomImage}
+        gameName={game.name}
+        description={game.description}
+        timeSlots={game.timeSlots}
+        price={game.price}
+        onBooking={onBooking}
+      ></GameInfoViewer>
+      {user.role === Role.STORE_OWNER && (
+        <div className="flex justify-center pb-10">
+          <button
+            className="flex w-28 flex-wrap content-center justify-center rounded border-0 bg-cyan-500 py-1 px-1 text-base text-white hover:bg-cyan-700 focus:outline-none"
+            onClick={() => router.push(`/games/${game.id}/edit`)}
+          >
+            <h4>{"edit"}</h4>
+          </button>
+        </div>
+      )}{" "}
+    </div>
   );
 };
 
