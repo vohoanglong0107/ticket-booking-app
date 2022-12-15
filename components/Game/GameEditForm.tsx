@@ -1,28 +1,41 @@
 import { useState } from "react";
 import Image, { StaticImageData } from "next/image";
+import TimeSlotView, { TimeSlot } from "./TimeSlot";
+import TimeSlotPicker from "./TimeSlotPicker";
 
-interface timeSlot {
-  id: string;
-  startTime: string;
-  endTime: string;
-}
+export type OnGameEdit = (
+  img: StaticImageData,
+  gameName: string,
+  description: string,
+  price: number,
+  timeSlots: Array<TimeSlot>
+) => void;
+
 interface Props {
   img: StaticImageData;
   gameName: string;
   description: string;
-  timeSlots: Array<timeSlot>;
+  timeSlots: Array<TimeSlot>;
+  price: number;
+  onEdit: OnGameEdit;
 }
 
-export default function TicketFormBooking({
+export default function GameEditForm({
   img: imgProp,
   gameName: gameNameProp,
   description: descriptionProp,
   timeSlots: timeSlotsProp,
+  price: priceProp,
+  onEdit,
 }: Props) {
   const [img, setImg] = useState(imgProp);
   const [gameName, setGameName] = useState(gameNameProp);
   const [description, setDescription] = useState(descriptionProp);
   const [timeSlots, setTimeSlots] = useState(timeSlotsProp);
+  const [price, setPrice] = useState(priceProp);
+  const onSubmit = () => {
+    onEdit(img, gameName, description, price, timeSlots);
+  };
 
   return (
     <section className="body-font overflow-hidden bg-white text-gray-700">
@@ -35,17 +48,25 @@ export default function TicketFormBooking({
             <h2 className="title-font text-sm tracking-widest text-gray-500">
               ASIA PARK - CÔNG VIÊN CHÂU Á
             </h2>
-            <h1 className="title-font mb-1 text-3xl font-medium text-gray-900 ">
-              {gameName}
-            </h1>
+            <input
+              type="text"
+              id="name"
+              name="name"
+              className="title-font mb-1 rounded text-3xl font-medium text-gray-900"
+              placeholder="Game name"
+              onChange={(e) => {
+                setGameName(e.target.value);
+              }}
+              value={gameName}
+            />
             <div className="mb-4 flex">
               <span className="flex items-center">
                 <svg
                   fill="currentColor"
                   stroke="currentColor"
-                  stroke-linecap="round"
-                  stroke-linejoin="round"
-                  stroke-width="2"
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                  strokeWidth="2"
                   className="h-4 w-4 text-red-500"
                   viewBox="0 0 24 24"
                 >
@@ -54,9 +75,9 @@ export default function TicketFormBooking({
                 <svg
                   fill="currentColor"
                   stroke="currentColor"
-                  stroke-linecap="round"
-                  stroke-linejoin="round"
-                  stroke-width="2"
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                  strokeWidth="2"
                   className="h-4 w-4 text-red-500"
                   viewBox="0 0 24 24"
                 >
@@ -65,9 +86,9 @@ export default function TicketFormBooking({
                 <svg
                   fill="currentColor"
                   stroke="currentColor"
-                  stroke-linecap="round"
-                  stroke-linejoin="round"
-                  stroke-width="2"
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                  strokeWidth="2"
                   className="h-4 w-4 text-red-500"
                   viewBox="0 0 24 24"
                 >
@@ -76,9 +97,9 @@ export default function TicketFormBooking({
                 <svg
                   fill="currentColor"
                   stroke="currentColor"
-                  stroke-linecap="round"
-                  stroke-linejoin="round"
-                  stroke-width="2"
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                  strokeWidth="2"
                   className="h-4 w-4 text-red-500"
                   viewBox="0 0 24 24"
                 >
@@ -87,9 +108,9 @@ export default function TicketFormBooking({
                 <svg
                   fill="none"
                   stroke="currentColor"
-                  stroke-linecap="round"
-                  stroke-linejoin="round"
-                  stroke-width="2"
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                  strokeWidth="2"
                   className="h-4 w-4 text-red-500"
                   viewBox="0 0 24 24"
                 >
@@ -101,9 +122,9 @@ export default function TicketFormBooking({
                 <a className="text-gray-500">
                   <svg
                     fill="currentColor"
-                    stroke-linecap="round"
-                    stroke-linejoin="round"
-                    stroke-width="2"
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                    strokeWidth="2"
                     className="h-5 w-5"
                     viewBox="0 0 24 24"
                   >
@@ -113,9 +134,9 @@ export default function TicketFormBooking({
                 <a className="ml-2 text-gray-500">
                   <svg
                     fill="currentColor"
-                    stroke-linecap="round"
-                    stroke-linejoin="round"
-                    stroke-width="2"
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                    strokeWidth="2"
                     className="h-5 w-5"
                     viewBox="0 0 24 24"
                   >
@@ -125,9 +146,9 @@ export default function TicketFormBooking({
                 <a className="ml-2 text-gray-500">
                   <svg
                     fill="currentColor"
-                    stroke-linecap="round"
-                    stroke-linejoin="round"
-                    stroke-width="2"
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                    strokeWidth="2"
                     className="h-5 w-5"
                     viewBox="0 0 24 24"
                   >
@@ -136,23 +157,79 @@ export default function TicketFormBooking({
                 </a>
               </span>
             </div>
-            <p className="h-72 leading-relaxed">{description}</p>
+            <textarea
+              id="description"
+              name="description"
+              className="h-72 w-full leading-relaxed"
+              value={description}
+              placeholder="description"
+              onChange={(e) => setDescription(e.target.value)}
+            />
+            <label className="p-5">Price: </label>
+            <input
+              type="text"
+              id="price"
+              name="price"
+              className="mb-1 rounded border border-gray-200 text-gray-900"
+              placeholder="Price"
+              onChange={(e) => {
+                setPrice(parseFloat(e.target.value || "0"));
+              }}
+              value={price}
+            />
             <div className="mt-6 mb-5 flex items-center border-b-2 border-gray-200 pb-5"></div>
-            <div className="grid grid-cols-4 gap-4">
-              {timeSlots?.map((timeSlot) => {
+            <div className="flex flex-row flex-wrap gap-2">
+              {timeSlots?.map((timeSlot, timeSlotIndex) => {
                 return (
-                  <button
-                    className="ml-auto flex rounded border-0 bg-red-500 py-4 px-2 text-base text-white hover:bg-red-600 focus:outline-none"
-                    key={timeSlot.id}
-                  >
-                    <h4>
-                      {timeSlot.startTime}- {timeSlot.endTime}
-                    </h4>
-                  </button>
+                  <TimeSlotView
+                    key={timeSlot.id || timeSlotIndex}
+                    id={timeSlot.id}
+                    startTime={timeSlot.startTime}
+                    endTime={timeSlot.endTime}
+                    dialog={
+                      <TimeSlotPicker
+                        key={timeSlot.id}
+                        startTime={timeSlot.startTime}
+                        endTime={timeSlot.endTime}
+                        onClose={(startTime, endTime) => {
+                          setTimeSlots((oldTimeSlots) =>
+                            oldTimeSlots.map(
+                              (oldTimeSlot, oldTimeSlotIndex) => {
+                                if (oldTimeSlotIndex === timeSlotIndex)
+                                  return { ...oldTimeSlot, startTime, endTime };
+                                else return oldTimeSlot;
+                              }
+                            )
+                          );
+                        }}
+                      />
+                    }
+                  />
                 );
               })}
+              <TimeSlotView
+                text="+"
+                dialog={
+                  <TimeSlotPicker
+                    onClose={(startTime, endTime) => {
+                      setTimeSlots((oldTimeSlots) => [
+                        ...oldTimeSlots,
+                        { startTime, endTime },
+                      ]);
+                    }}
+                  />
+                }
+              />
             </div>
           </div>
+        </div>
+        <div className="my-5 flex justify-center py-5">
+          <button
+            className="flex w-28 flex-wrap content-center justify-center rounded border-0 bg-cyan-500 py-1 px-1 text-base text-white hover:bg-cyan-700 focus:outline-none"
+            onClick={onSubmit}
+          >
+            <h4>{"Submit"}</h4>
+          </button>
         </div>
       </div>
     </section>

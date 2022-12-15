@@ -1,16 +1,12 @@
 import {
   objectType,
   extendType,
-  enumType,
-  queryType,
   stringArg,
-  mutationField,
-  mutationType,
   floatArg,
   intArg,
+  list,
 } from "nexus";
-import { type } from "os";
-import { TimeSlot } from "./TimeSlot";
+import { TimeSlot, TimeSlotUpsertType } from "./TimeSlot";
 
 export const Game = objectType({
   name: "Game",
@@ -47,7 +43,7 @@ export const GameQueryById = extendType({
       args: {
         game_id: stringArg(),
       },
-      async resolve(parent, args, context) {
+      async resolve(_, args, context) {
         const game = await context.prisma.game.findUnique({
           where: {
             id: args.game_id,
@@ -60,8 +56,8 @@ export const GameQueryById = extendType({
           ...game,
           timeSlots: game.timeSlots.map((timeSlot) => ({
             ...timeSlot,
-            startTime: timeSlot.startTime.toString().substring(16, 21),
-            endTime: timeSlot.endTime.toString().substring(16, 21),
+            startTime: new Date(timeSlot.startTime.toString()).toISOString(),
+            endTime: new Date(timeSlot.endTime.toString()).toISOString(),
           })),
         };
         return gameWithStringDatetime;
@@ -114,20 +110,58 @@ export const GameUpdate = extendType({
         location: stringArg(),
         price: floatArg(),
         remaining_slot: intArg(),
+        timeSlots: list(TimeSlotUpsertType),
       },
       async resolve(_, args, context) {
-        return context.prisma.game.update({
+        await context.prisma.$transaction([
+          ...args.timeSlots.map((timeSlot) =>
+            context.prisma.timeSlot.upsert({
+              where: {
+                // hack waiting for https://github.com/prisma/prisma/issues/5233
+                id: timeSlot.id || "0",
+              },
+              create: {
+                startTime: timeSlot.startTime,
+                endTime: timeSlot.endTime,
+                game_id: timeSlot.game_id,
+              },
+              update: {
+                startTime: timeSlot.startTime,
+                endTime: timeSlot.endTime,
+              },
+            })
+          ),
+          context.prisma.game.update({
+            where: {
+              id: args.id,
+            },
+            data: {
+              name: args.name,
+              description: args.description,
+              location: args.location,
+              price: args.price,
+              remaining_slot: args.remaining_slot,
+            },
+          }),
+        ]);
+        const game = await context.prisma.game.findUnique({
           where: {
             id: args.id,
           },
-          data: {
-            name: args.name,
-            description: args.description,
-            location: args.location,
-            price: args.price,
-            remaining_slot: args.remaining_slot,
+          include: {
+            timeSlots: true,
           },
         });
+
+        const gameWithStringDatetime = {
+          ...game,
+          timeSlots: game.timeSlots.map((timeSlot) => ({
+            ...timeSlot,
+            startTime: new Date(timeSlot.startTime.toString()).toISOString(),
+            endTime: new Date(timeSlot.endTime.toString()).toISOString(),
+          })),
+        };
+        return gameWithStringDatetime;
       },
     });
   },
